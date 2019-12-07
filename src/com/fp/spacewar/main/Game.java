@@ -18,10 +18,11 @@ public class Game extends Canvas implements Runnable {
 	private Thread thread;
 	private BufferedImage image = new BufferedImage(w, h,BufferedImage.TYPE_INT_RGB);
 	private BufferedImage spriteSheet=null;
-	private BufferedImage background=null;
 	private Player p;
 	private Controller c;
 	private boolean isShooting=false;
+	private Background b;
+	private Background b2;
 	public Game() {
 		
 	}
@@ -32,7 +33,6 @@ public class Game extends Canvas implements Runnable {
 		BufferedImageLoader loader= new BufferedImageLoader();
 		try {
 			spriteSheet = loader.loadImage("SpriteSheet.png");
-			background = loader.loadImage("Background.png");
 		} catch (IOException e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -42,6 +42,9 @@ public class Game extends Canvas implements Runnable {
 		
 		p = new Player(100,360,this);
 		c = new Controller(this);
+		b = new Background();
+		b2 = new Background(2001,0);
+		
 		
 		//player = ss.grabImage(1, 1, 50, 50);
 	}
@@ -105,7 +108,8 @@ public class Game extends Canvas implements Runnable {
 		Graphics g =bs.getDrawGraphics();
 		///////////////////////////////
 		g.drawImage(image, 0,0,getWidth(),getHeight(),this);
-		g.drawImage(background, 0, 0, null);
+		b.draw(g);
+		b2.draw(g);
 		p.render(g);
 		c.render(g);
 		
