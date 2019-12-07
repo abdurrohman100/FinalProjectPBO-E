@@ -14,7 +14,6 @@ import javax.imageio.ImageIO;
 	 
 	    private double x;
 	    private double y;
-	 
 	    public Background() {
 	        this(0,0);
 	    }
@@ -22,7 +21,7 @@ import javax.imageio.ImageIO;
 	    public Background(double x, double y) {
 	        this.x = x;
 	        this.y = y;
-	 
+	        
 	        // Try to open the image file background.png
 	        BufferedImageLoader loader= new BufferedImageLoader();
 			try {
@@ -44,6 +43,7 @@ import javax.imageio.ImageIO;
 	 
 	        // Move the x position left for next time
 	        this.x -= 5;
+	        
 	 
 	        // Check to see if the image has gone off stage left
 	        if (this.x <= -1 * image.getWidth()) {

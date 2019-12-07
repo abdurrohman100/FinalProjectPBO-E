@@ -1,7 +1,10 @@
-package com.fp.spacewar.main;
+package com.fp.spacewar.main.entity;
 
 import java.awt.Graphics;
 import java.util.LinkedList;
+
+import com.fp.spacewar.main.Bullet;
+import com.fp.spacewar.main.Game;
 
 public class Controller {
 	private LinkedList<Bullet> b = new LinkedList<Bullet>();

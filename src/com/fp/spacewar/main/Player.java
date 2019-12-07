@@ -1,25 +1,35 @@
 package com.fp.spacewar.main;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
-public class Player {
-	private double x;
-	private double y;
+import com.fp.spacewar.main.entity.EntityA;
+
+public class Player extends GameObject implements EntityA{
+
 	private double velX=0;
 	private double velY=0;
-	
-	private BufferedImage player;
-	//init player
-	public Player(double x,double y, Game game) {
-		this.x=x;
-		this.y=y;
-		SpriteSheet ss =new SpriteSheet(game.getSpriteSheet());
-		player = ss.grabImage(1, 1, 50, 50);
+	private Texture tex;
+	private int health;
+	private int score=0;
+	public int getScore() {
+		return score;
+	}
+	public void setScore(int score) {
+		this.score = score;
+	}
+
+	public Player(double x,double y,Texture tex) {
+		super(x,y);
+		this.tex=tex;
+		
+		
 	}
 	public void tick() {
 		x+=velX;
 		y+=velY;
+
 		if(x>=1280-40)x=1280-40;
 		if(x<=0)x=0;
 		if(y<=0)y=0;
@@ -27,7 +37,7 @@ public class Player {
 		
 	}
 	public void render(Graphics g) {
-		g.drawImage(player, (int)x,(int)y,null);
+		g.drawImage(tex.player, (int)x,(int)y,null);
 	}
 	public double getX() {
 		return x;
@@ -53,6 +63,10 @@ public class Player {
 	public void setVelY(double velY) {
 		this.velY = velY;
 	}
+	public Rectangle getBounds() {
+		return new Rectangle((int)x,(int)y,50,50);
+	}
+	
 
 
 }

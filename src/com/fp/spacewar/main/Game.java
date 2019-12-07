@@ -7,8 +7,15 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.Timer;
 
 import javax.swing.JFrame;
+
+import com.fp.spacewar.main.entity.Controller;
+import com.fp.spacewar.main.entity.EnemyController;
+import com.fp.spacewar.main.entity.EntityA;
+import com.fp.spacewar.main.entity.EntityB;
 
 public class Game extends Canvas implements Runnable {
 	public static final int w =1280;
@@ -18,16 +25,25 @@ public class Game extends Canvas implements Runnable {
 	private Thread thread;
 	private BufferedImage image = new BufferedImage(w, h,BufferedImage.TYPE_INT_RGB);
 	private BufferedImage spriteSheet=null;
-	private Player p;
-	private Controller c;
+	private Player player;
+	private Texture tex;
+	private Controller bulletController;
 	private boolean isShooting=false;
-	private Background b;
-	private Background b2;
+	private Background background1;
+	private Background background2;
+	private EnemyController enemyController;
+	private EntityController entityController;
+
+	public LinkedList<EntityA> entityAList;
+	public LinkedList<EntityB> entityBList;
+	
 	public Game() {
+		this.setPreferredSize(new Dimension (w,h));
+		this.setMaximumSize(new Dimension (w,h));
+		this.setMinimumSize(new Dimension (w,h));
 		
 	}
-	private BufferedImage player;
-	
+
 	public void init() {
 		requestFocus();
 		BufferedImageLoader loader= new BufferedImageLoader();
@@ -39,23 +55,26 @@ public class Game extends Canvas implements Runnable {
 		}
 		
 		addKeyListener(new KeyInput(this));
-		
-		p = new Player(100,360,this);
-		c = new Controller(this);
-		b = new Background();
-		b2 = new Background(2001,0);
-		
-		
-		//player = ss.grabImage(1, 1, 50, 50);
+		//myTimer = new javax.swing.Timer(timerDelay, arg1)
+		tex= new Texture(this);
+		player = new Player(100,360,tex);
+		//bulletController = new Controller(this);
+		background1 = new Background();
+		background2 = new Background(2001,0);
+		//enemyController = new EnemyController(tex);
+		entityController = new EntityController(tex,this);
+		entityAList = entityController.getEntityAList();
+		entityBList = entityController.getEntityBList();
+	
 	}
 	
-	private synchronized void start() {
+	public synchronized void start() {
 		if(running) return;
 		running= true;
 		thread= new Thread(this);
 		thread.start();
 	}
-	private synchronized void stop() {
+	public synchronized void stop() {
 		if(!running) return;
 		running= false;
 		try {
@@ -69,15 +88,19 @@ public class Game extends Canvas implements Runnable {
 	public void run() {
 		// TODO Auto-generated method stub
 		init();
+
 		long lastTime = System.nanoTime();
 		final double ammountOfTick = 60.0;
 		double ns=1000000000/ammountOfTick;
+		int tns=1000000000;
 		double delta=0;
 		int updates=0;
 		int frames=0;
 		long timer=System.currentTimeMillis();
+		long start=System.nanoTime();
 		while(running) {
 			long now=System.nanoTime();
+			System.out.println("Score "+ player.getScore());
 			delta+=(now-lastTime)/ns;
 			lastTime=now;
 			if(delta>=1) {
@@ -85,19 +108,24 @@ public class Game extends Canvas implements Runnable {
 				updates++;
 				delta--;
 			}
+//			
 			render();
 			frames++;
 			//System.out.println("WOrking");
 			if(System.currentTimeMillis()-timer>1000) {
 				timer+=1000;
-				//System.out.println(updates + "Ticks, FPS"+ frames);
+				System.out.println(updates + "Ticks, FPS"+ frames);
 				updates=0;
 				frames=0;
 			}
 			
+
+			
+			
 		}
 		stop();
 	}
+
 	private void render() {
 		// TODO Auto-generated method stub
 		BufferStrategy bs = this.getBufferStrategy();
@@ -108,10 +136,12 @@ public class Game extends Canvas implements Runnable {
 		Graphics g =bs.getDrawGraphics();
 		///////////////////////////////
 		g.drawImage(image, 0,0,getWidth(),getHeight(),this);
-		b.draw(g);
-		b2.draw(g);
-		p.render(g);
-		c.render(g);
+		background1.draw(g);
+		background2.draw(g);
+		//enemyController.render(g);
+		entityController.render(g);
+		player.render(g);
+		//bulletController.render(g);
 		
 		///////////////////////////////
 		g.dispose();
@@ -119,60 +149,50 @@ public class Game extends Canvas implements Runnable {
 	}
 	private void tick() {
 		// TODO Auto-generated method stub
-		p.tick();
-		c.tick();
+		player.tick();
+		//enemyController.tick();
+		//bulletController.tick();
+		entityController.tick();
 	
 	}
 	public void keyPressed(KeyEvent e) {
 		int k= e.getKeyCode();
-		System.out.println(p.getX() +" "+ p.getY());
+		//System.out.println(player.getX() +" "+ player.getY());
 		if(k==KeyEvent.VK_RIGHT) {
-			p.setVelX(6);
+			player.setVelX(6);
 		}else if(k==KeyEvent.VK_LEFT) {
-			p.setVelX(-6);
+			player.setVelX(-6);
 		}else if(k==KeyEvent.VK_DOWN) {
-			p.setVelY(3);
+			player.setVelY(3);
 		}else if(k==KeyEvent.VK_UP) {
-			p.setVelY(-3);
+			player.setVelY(-3);
 		}else if(k==KeyEvent.VK_SPACE && !isShooting) {
 			isShooting=true;
-			c.addBullet(new Bullet(p.getX()+40, p.getY(), this));		
+			entityController.addEntity(new Bullet(player.getX(), player.getY(), tex,this));		
 		}
 		
 	}
 	public void keyReleased(KeyEvent e) {
 		int k= e.getKeyCode();
 
-		System.out.println(p.getX() +" "+ p.getY());
+		//System.out.println(player.getX() +" "+ player.getY());
 		if(k==KeyEvent.VK_RIGHT) {
-			p.setVelX(0);
+			player.setVelX(0);
 		}else if(k==KeyEvent.VK_LEFT) {
-			p.setVelX(0);
+			player.setVelX(0);
 		}else if(k==KeyEvent.VK_DOWN) {
-			p.setVelY(0);
+			player.setVelY(0);
 		}else if(k==KeyEvent.VK_UP) {
-			p.setVelY(0);
+			player.setVelY(0);
 		}else if(k==KeyEvent.VK_SPACE) {
 			isShooting=false;
 		}
 		
 		
 	}
-	public static void main(String args[]) {
-		Game game = new Game();
-		game.setPreferredSize(new Dimension (w,h));
-		game.setMaximumSize(new Dimension (w,h));
-		game.setMinimumSize(new Dimension (w,h));
-		JFrame frame = new JFrame(title);
-		frame.add(game);
-		frame.pack();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
-		frame.setResizable(false);
-		frame.setLocationRelativeTo(null);
-		
-		game.start();
-	}
+ 
+
+
 	public BufferedImage getSpriteSheet() {
 		return spriteSheet;
 	}
