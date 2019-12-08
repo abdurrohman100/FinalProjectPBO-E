@@ -6,12 +6,11 @@ import java.awt.image.BufferedImage;
 
 import com.fp.spacewar.main.entity.EntityA;
 
-public class Player extends GameObject implements EntityA{
-
+public class Player extends GameObject{
+	public int healthPoint;
 	private double velX=0;
 	private double velY=0;
 	private Texture tex;
-	private int health;
 	private int score=0;
 	public int getScore() {
 		return score;
@@ -22,6 +21,7 @@ public class Player extends GameObject implements EntityA{
 
 	public Player(double x,double y,Texture tex) {
 		super(x,y);
+		this.healthPoint = 100;
 		this.tex=tex;
 		
 		
@@ -38,6 +38,10 @@ public class Player extends GameObject implements EntityA{
 	}
 	public void render(Graphics g) {
 		g.drawImage(tex.player, (int)x,(int)y,null);
+	}
+	
+	public void reduceHP(int damage) {
+		this.healthPoint-=damage;
 	}
 	public double getX() {
 		return x;

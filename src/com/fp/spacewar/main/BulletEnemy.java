@@ -6,21 +6,21 @@ import java.awt.image.BufferedImage;
 
 import com.fp.spacewar.main.entity.EntityA;
 
-public class Bullet extends GameObject implements EntityA{
+public class BulletEnemy extends GameObject{
 
 	private double velX;
 	private double velY;
 	private Game game;
 	private Texture tex;
 	
-	public Bullet (double x, double y,Texture tex,Game game) {
+	public BulletEnemy (double x, double y,Texture tex,Game game) {
 		super(x,y);
 		this.tex=tex;
 		this.game=game;
 		
 	}
 	public void tick() {
-		x+=8;
+		x-=3;
 //		if(Physics.Collision(this, game.entityBList)) {
 //			System.out.println("Duar");
 //			

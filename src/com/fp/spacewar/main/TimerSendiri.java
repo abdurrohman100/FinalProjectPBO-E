@@ -12,7 +12,7 @@ public class TimerSendiri implements Runnable{
 	}
 
 	public long getTime() {
-		System.out.println("panggil waktu" + second);
+//		System.out.println("panggil waktu" + second);
 		return second;
 	}
 	

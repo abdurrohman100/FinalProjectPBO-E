@@ -66,8 +66,8 @@ public class Game extends Canvas implements Runnable {
 		background2 = new Background(2001,0);
 		//enemyController = new EnemyController(tex);
 		entityController = new EntityController(tex,this);
-		entityAList = entityController.getEntityAList();
-		entityBList = entityController.getEntityBList();
+//		entityAList = entityController.getEntityAList();
+//		entityBList = entityController.getEntityBList();
 	
 	}
 	
@@ -174,7 +174,7 @@ public class Game extends Canvas implements Runnable {
 			player.setVelY(-3);
 		}else if(k==KeyEvent.VK_SPACE && !isShooting) {
 			isShooting=true;
-			entityController.addEntity(new Bullet(player.getX(), player.getY(), tex,this));		
+			entityController.addBullet(new Bullet(player.getX(), player.getY(), tex,this));		
 		}
 		
 	}
@@ -197,7 +197,9 @@ public class Game extends Canvas implements Runnable {
 		
 	}
  
-
+	public Player getPlayer() {
+		return this.player;
+	}
 
 	public BufferedImage getSpriteSheet() {
 		return spriteSheet;
