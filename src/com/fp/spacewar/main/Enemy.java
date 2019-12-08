@@ -4,9 +4,10 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.Random;
 
+import com.fp.spacewar.main.entity.EntityA;
 import com.fp.spacewar.main.entity.EntityB;
 
-public class Enemy extends GameObject implements EntityB {
+public class Enemy extends GameObject implements EntityA {
 
 	private Texture tex;
 	private int healtPoint, attackPoint, aggresivePoint;
@@ -45,7 +46,7 @@ public class Enemy extends GameObject implements EntityB {
 			x=1300;
 			y=random.nextInt(600);
 		}
-		if(Physics.Collision(this, game.entityAList)) {
+		if(Physics.Collision(this, game.entityBList)) {
 			System.out.println("Duar");
 			entityController.removeEntity(this);
 		}
