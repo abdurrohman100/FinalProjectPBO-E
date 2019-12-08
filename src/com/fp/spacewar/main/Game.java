@@ -12,8 +12,8 @@ import java.util.Timer;
 
 import javax.swing.JFrame;
 
-import com.fp.spacewar.main.entity.Controller;
-import com.fp.spacewar.main.entity.EnemyController;
+//import com.fp.spacewar.main.entity.Controller;
+//import com.fp.spacewar.main.entity.EnemyController;
 import com.fp.spacewar.main.entity.EntityA;
 import com.fp.spacewar.main.entity.EntityB;
 
@@ -22,16 +22,19 @@ public class Game extends Canvas implements Runnable {
 	public static final int h =720;
 	public final static String title = "Space Impact";
 	private boolean running= false;
-	private Thread thread;
+	private Thread thread,waktu;
+	public TimerSendiri pewaktu;
+	public long gameTime;
+	
 	private BufferedImage image = new BufferedImage(w, h,BufferedImage.TYPE_INT_RGB);
 	private BufferedImage spriteSheet=null;
 	private Player player;
 	private Texture tex;
-	private Controller bulletController;
+	//private Controller bulletController;
 	private boolean isShooting=false;
 	private Background background1;
 	private Background background2;
-	private EnemyController enemyController;
+	//private EnemyController enemyController;
 	private EntityController entityController;
 
 	public LinkedList<EntityA> entityAList;
@@ -73,6 +76,10 @@ public class Game extends Canvas implements Runnable {
 		running= true;
 		thread= new Thread(this);
 		thread.start();
+		
+		waktu = new Thread(pewaktu = new TimerSendiri());
+		waktu.start();
+		
 	}
 	public synchronized void stop() {
 		if(!running) return;
@@ -88,19 +95,20 @@ public class Game extends Canvas implements Runnable {
 	public void run() {
 		// TODO Auto-generated method stub
 		init();
-
 		long lastTime = System.nanoTime();
 		final double ammountOfTick = 60.0;
 		double ns=1000000000/ammountOfTick;
-		int tns=1000000000;
 		double delta=0;
 		int updates=0;
 		int frames=0;
 		long timer=System.currentTimeMillis();
-		long start=System.nanoTime();
+
 		while(running) {
+			gameTime = pewaktu.getTime(); 
+//			System.out.println("wakltu skregadsasdsa"+ gameTime);
 			long now=System.nanoTime();
-			System.out.println("Score "+ player.getScore());
+//			System.out.println("Score "+ player.getScore());
+			
 			delta+=(now-lastTime)/ns;
 			lastTime=now;
 			if(delta>=1) {
@@ -109,6 +117,7 @@ public class Game extends Canvas implements Runnable {
 				delta--;
 			}
 //			
+		
 			render();
 			frames++;
 			//System.out.println("WOrking");
@@ -117,10 +126,7 @@ public class Game extends Canvas implements Runnable {
 				System.out.println(updates + "Ticks, FPS"+ frames);
 				updates=0;
 				frames=0;
-			}
-			
-
-			
+			}				
 			
 		}
 		stop();

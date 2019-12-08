@@ -12,6 +12,5 @@ public class GameObject {
 		return new Rectangle((int)x,(int)y,width,height);
 	}
 
-	
 
 }
