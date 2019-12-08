@@ -1,8 +1,11 @@
 package com.fp.spacewar.main;
 
 import java.awt.Canvas;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
@@ -11,6 +14,7 @@ import java.util.LinkedList;
 import java.util.Timer;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import com.fp.spacewar.main.Game.GameState;
 //import com.fp.spacewar.main.entity.Controller;
@@ -23,10 +27,11 @@ public class Game extends Canvas implements Runnable {
 	public static final int h =720;
 	public final static String title = "Space Impact";
 	private boolean running= false;
+	private boolean scoredSubmitted= false;
 	private Thread thread,waktu;
 	public TimerSendiri pewaktu;
 	public long gameTime;
-	
+	private int totalScore;
 	private BufferedImage image = new BufferedImage(w, h,BufferedImage.TYPE_INT_RGB);
 	private BufferedImage spriteSheet=null;
 	private Player player;
@@ -34,7 +39,6 @@ public class Game extends Canvas implements Runnable {
 	private boolean isShooting=false;
 	private Background background1;
 	private Background background2;
-	private int score;
 	private EntityController entityController;
 	private Menu myMenu;
 	private ScoreManager myScoreManager;
@@ -46,6 +50,7 @@ public class Game extends Canvas implements Runnable {
 		IN_PLAY,
 		IN_GAMEOVER,
 		IN_HOF;
+
 	}
 	
 	
@@ -66,7 +71,8 @@ public class Game extends Canvas implements Runnable {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
-		
+		scoredSubmitted=false;
+		running=true;
 		addKeyListener(new KeyInput(this));
 		addMouseListener(new MouseAction(this));
 		tex= new Texture(this);
@@ -78,6 +84,7 @@ public class Game extends Canvas implements Runnable {
 		myScoreManager = new ScoreManager(this);
 		entityController = new EntityController(tex,this);
 		currentGameState=GameState.IN_MENU;
+		pewaktu.timerReset();
 	
 	}
 	
@@ -136,7 +143,7 @@ public class Game extends Canvas implements Runnable {
 				System.out.println(updates + "Ticks, FPS"+ frames);
 				updates=0;
 				frames=0;
-			}				
+			}		
 			
 		}
 		stop();
@@ -163,7 +170,11 @@ public class Game extends Canvas implements Runnable {
 			myScoreManager.renderHOF(g);
 		}if(currentGameState==GameState.IN_MENU) {
 			myMenu.render(g);
+		}if(currentGameState==GameState.IN_GAMEOVER) {
+			drawGameOver(g);
+			//thread.sleep(arg0);
 		}
+		
 		
 		
 
@@ -173,10 +184,11 @@ public class Game extends Canvas implements Runnable {
 	}
 	private void tick() {
 		// TODO Auto-generated method stub
-		score++;
+		
 		if(currentGameState==GameState.IN_PLAY) {
 			player.tick();
 			entityController.tick();
+			totalScore=(int) (player.getScore()+pewaktu.getTime());
 			myScoreManager.tick();
 		}
 	
@@ -197,6 +209,19 @@ public class Game extends Canvas implements Runnable {
 				entityController.addBullet(new Bullet(player.getX(), player.getY(), tex,this));		
 			}
 		}
+		if(currentGameState==GameState.IN_GAMEOVER) {
+			if(k==KeyEvent.VK_SPACE) {
+				if(!scoredSubmitted) {
+					myScoreManager.addScore(JOptionPane.showInputDialog("Input Your Name"), totalScore);
+					scoredSubmitted=true;
+				}	
+			}else if(k==KeyEvent.VK_ESCAPE) {
+				currentGameState=GameState.IN_MENU;
+				init();
+			}
+			
+		}
+
 		
 		
 	}
@@ -229,12 +254,41 @@ public class Game extends Canvas implements Runnable {
 		return spriteSheet;
 	}
 
-	public int getScore() {
-		return score;
+	public void drawGameOver(Graphics g) {
+		Graphics2D g2d =(Graphics2D)g;
+		Font title = new Font("SanSerif", Font.BOLD,66);
+		g.setFont(title);
+		g.setColor(Color.WHITE);
+		g.drawString("GameOver", Game.w/2-150, 100);
+		Font word = new Font("SanSerif", Font.BOLD,46);
+		g.setFont(word);
+		String stringScore = " "+player.getScore();
+		g.drawString("Your score is"+stringScore , Game.w/2-150, 200);
+		if(totalScore>=myScoreManager.getLastTen()) {
+			if(totalScore>=myScoreManager.getCurrentHS()) {
+				g.drawString("You got a new HighScore", Game.w/2-150, 250);
+				
+			}
+			else {
+				g.drawString("You rank in top 10", Game.w/2-150, 250);
+			}
+			
+			if(!scoredSubmitted) {
+				g.drawString("Please press space to input your name", Game.w/2-150, 300);
+			}	
+		}
+		g.drawString("Please Esc to return to main menu", Game.w/2-150, 400);
+		//currentGameState=GameState.IN_MENU;
+		
+		
 	}
 
-	public void setScore(int score) {
-		this.score = score;
+	public int getTotalScore() {
+		return totalScore;
+	}
+
+	public void setTotalScore(int totalScore) {
+		this.totalScore = totalScore;
 	}
 
 

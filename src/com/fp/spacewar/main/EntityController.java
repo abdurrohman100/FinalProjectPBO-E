@@ -91,11 +91,8 @@ public class EntityController {
 		collision(game.getPlayer(), bulletEnemyList);
 		//check player crash into enemy army
 		collisionObject(game.getPlayer(), armyList);
-		//check army enemy killed
-		Army armyIter = collision(armyList, bulletList);
-		if(armyIter!= null){
-			removeArmy(armyIter);
-		}
+		//check army enemy killed by player bullet
+		collision(armyList, bulletList);
 		
 //		//check enemy killed
 //				Army armyIter = collision(armyList, bulletList);
@@ -158,15 +155,15 @@ public class EntityController {
 	}
 	
 	//checkkilled enemy
-	public Army collision(LinkedList<Army> armyList2, LinkedList<Bullet> bulletList2) {
+	public void collision(LinkedList<Army> armyList2, LinkedList<Bullet> bulletList2) {
 		for(int a=0;a<bulletList2.size();a++) {
 			for(int b=0; b<armyList2.size();b++) {
 				if((armyList2.get(b).getBounds()).intersects(bulletList2.get(a).getBounds())) {
-					return armyList2.get(b);
+					game.getPlayer().setScore(game.getPlayer().getScore()+2);
+					armyList2.remove(b);
 				}
 			}
 		}
-		return null;
 	}
 	
 	//enemy bullet hit player
@@ -229,11 +226,11 @@ public class EntityController {
 		   this.aggresivePoint = 1;
 		  }else if(game.gameTime <= 30) {
 		   this.aggresivePoint = 2;
-		  }else if(game.gameTime <= 320) {
+		  }else if(game.gameTime <= 50) {
 		   this.aggresivePoint = 3;
-		  }else if(game.gameTime <= 420) {
+		  }else if(game.gameTime <= 70) {
 		   this.aggresivePoint = 4;
-		  }else if(game.gameTime <= 520) {
+		  }else if(game.gameTime <= 90) {
 		   this.aggresivePoint = 5;
 		  }else {
 		   this.aggresivePoint = 6;

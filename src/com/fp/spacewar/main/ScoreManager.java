@@ -27,7 +27,8 @@ public class ScoreManager {
     public ScoreManager(Game game) {
     	 scores = new ArrayList<Score>();
     	 this.game=game;
-    	 this.activeScore=0;
+    	 this.activeScore=game.getTotalScore();
+    	 
     }
     //getTop10
     public ArrayList<Score> getScores() {
@@ -37,6 +38,7 @@ public class ScoreManager {
     }
     //adding score
     public void addScore(String name, int score) {
+    	System.out.println(name+" "+score);
         loadScoreFile();
         scores.add(new Score(name, score));
         updateScoreFile();
@@ -47,9 +49,9 @@ public class ScoreManager {
         Collections.sort(scores, comparator);
     }
     //adding score
-    public void removesScore(int index) {
+    public void removesScore() {
         loadScoreFile();
-        scores.remove(index);
+        scores.removeAll(scores);
         updateScoreFile();
     }
     //load file
@@ -73,6 +75,7 @@ public class ScoreManager {
                 System.out.println("[Laad] IO Error: " + e.getMessage());
             }
         }
+        
     }
     public void updateScoreFile() {
         try {
@@ -95,10 +98,16 @@ public class ScoreManager {
     }
     //get highest score
     public int getCurrentHS() {
-    	if(scores ==null) {
+    	if(scores.isEmpty()) {
     		return 0;
     	}else {
     		return scores.get(0).getScore();
+    	}
+    }public int getLastTen() {
+    	if(scores.isEmpty()) {
+    		return 0;
+    	}else {
+    		return scores.get(scores.size()-1).getScore();
     	}
     }
     public void render(Graphics g) {
@@ -110,23 +119,32 @@ public class ScoreManager {
         	g.drawString(print, 5, 40);
     }
     public void renderHOF(Graphics g) {
-		//g.drawRect(0, 0, 1280, 720);
+    	
+    	loadScoreFile();
+    	sort();
+    	//g.drawRect(0, 0, 1280, 720);
 		Graphics2D g2d =(Graphics2D)g;
 		Font title = new Font("SanSerif", Font.BOLD,66);
 		g.setFont(title);
 		g.setColor(Color.WHITE	);
 		g.drawString("Hall of Shame", Game.w/2-150, 100);
-
+		Font back = new Font("SanSerif", Font.BOLD,20);
+		g.setFont(back);
+		g2d.draw(new Rectangle(20,50,60,30));
+		g.drawString("Back", 25, 70);
 		Font optMenu = new Font("SanSerif", Font.BOLD,46);
-		String cetak="";
-		for(int i=0;i<11;i++) {
+		g.setFont(optMenu);
+		
+		for(int i=0;i<scores.size();i++) {
+			String cetak="";
 			if(scores.size()!=0) {
 				Score temp= scores.get(i);
+				cetak=i+1 + " " + temp.getName()+" ";
 				if(temp!=null) {
-					cetak= ""+ temp.getScore();
+					cetak= cetak +""+ temp.getScore();
 				}
 				else {
-					cetak= "";
+					cetak= cetak+"";
 				}
 				
 			}
@@ -136,12 +154,10 @@ public class ScoreManager {
 			g.drawString(cetak, Game.w/2-100, 150+i*50+55);
 		}
     }
-    public void tick() {
-    	if(Game.currentGameState== GameState.IN_PLAY) {
-    		this.activeScore=game.getScore();
-    	}
-    }
 
+    public void tick() {
+    	activeScore=game.getTotalScore();
+    }
 
 	
 	

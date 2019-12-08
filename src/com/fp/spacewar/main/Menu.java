@@ -30,7 +30,7 @@ public class Menu {
 		Font optMenu = new Font("SanSerif", Font.BOLD,46);
 		g.drawString("Play", playButton.x+35, playButton.y+55);
 		g2d.draw(playButton);
-		g.drawString("Help", helpButton.x+35, helpButton.y+55);
+		g.drawString("Hall", helpButton.x+35, helpButton.y+55);
 		g2d.draw(helpButton);
 		g.drawString("Quit", quitButton.x+35, quitButton.y+55);
 		g2d.draw(quitButton);
