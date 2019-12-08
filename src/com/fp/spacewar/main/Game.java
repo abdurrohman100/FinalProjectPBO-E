@@ -12,6 +12,7 @@ import java.util.Timer;
 
 import javax.swing.JFrame;
 
+import com.fp.spacewar.main.Game.GameState;
 //import com.fp.spacewar.main.entity.Controller;
 //import com.fp.spacewar.main.entity.EnemyController;
 import com.fp.spacewar.main.entity.EntityA;
@@ -30,15 +31,24 @@ public class Game extends Canvas implements Runnable {
 	private BufferedImage spriteSheet=null;
 	private Player player;
 	private Texture tex;
-	//private Controller bulletController;
 	private boolean isShooting=false;
 	private Background background1;
 	private Background background2;
-	//private EnemyController enemyController;
+	private int score;
 	private EntityController entityController;
-
+	private Menu myMenu;
+	private ScoreManager myScoreManager;
+	public static GameState currentGameState;
 	public LinkedList<EntityA> entityAList;
 	public LinkedList<EntityB> entityBList;
+	public static enum GameState{
+		IN_MENU,
+		IN_PLAY,
+		IN_GAMEOVER,
+		IN_HOF;
+	}
+	
+	
 	
 	public Game() {
 		this.setPreferredSize(new Dimension (w,h));
@@ -58,16 +68,16 @@ public class Game extends Canvas implements Runnable {
 		}
 		
 		addKeyListener(new KeyInput(this));
-		//myTimer = new javax.swing.Timer(timerDelay, arg1)
+		addMouseListener(new MouseAction(this));
 		tex= new Texture(this);
 		player = new Player(100,360,tex);
 		//bulletController = new Controller(this);
 		background1 = new Background();
 		background2 = new Background(2001,0);
-		//enemyController = new EnemyController(tex);
+		myMenu = new Menu();
+		myScoreManager = new ScoreManager(this);
 		entityController = new EntityController(tex,this);
-//		entityAList = entityController.getEntityAList();
-//		entityBList = entityController.getEntityBList();
+		currentGameState=GameState.IN_MENU;
 	
 	}
 	
@@ -142,57 +152,71 @@ public class Game extends Canvas implements Runnable {
 		Graphics g =bs.getDrawGraphics();
 		///////////////////////////////
 		g.drawImage(image, 0,0,getWidth(),getHeight(),this);
-		background1.draw(g);
-		background2.draw(g);
-		//enemyController.render(g);
-		entityController.render(g);
-		player.render(g);
-		//bulletController.render(g);
 		
+		if(currentGameState==GameState.IN_PLAY) {
+			background1.draw(g);
+			background2.draw(g);
+			entityController.render(g);
+			player.render(g);
+			myScoreManager.render(g);
+		}if(currentGameState==GameState.IN_HOF) {
+			myScoreManager.renderHOF(g);
+		}if(currentGameState==GameState.IN_MENU) {
+			myMenu.render(g);
+		}
+		
+		
+
 		///////////////////////////////
 		g.dispose();
 		bs.show();
 	}
 	private void tick() {
 		// TODO Auto-generated method stub
-		player.tick();
-		//enemyController.tick();
-		//bulletController.tick();
-		entityController.tick();
+		score++;
+		if(currentGameState==GameState.IN_PLAY) {
+			player.tick();
+			entityController.tick();
+			myScoreManager.tick();
+		}
 	
 	}
 	public void keyPressed(KeyEvent e) {
 		int k= e.getKeyCode();
-		//System.out.println(player.getX() +" "+ player.getY());
-		if(k==KeyEvent.VK_RIGHT) {
-			player.setVelX(6);
-		}else if(k==KeyEvent.VK_LEFT) {
-			player.setVelX(-6);
-		}else if(k==KeyEvent.VK_DOWN) {
-			player.setVelY(3);
-		}else if(k==KeyEvent.VK_UP) {
-			player.setVelY(-3);
-		}else if(k==KeyEvent.VK_SPACE && !isShooting) {
-			isShooting=true;
-			entityController.addBullet(new Bullet(player.getX(), player.getY(), tex,this));		
+		if(currentGameState==GameState.IN_PLAY) {
+			if(k==KeyEvent.VK_RIGHT) {
+				player.setVelX(6);
+			}else if(k==KeyEvent.VK_LEFT) {
+				player.setVelX(-6);
+			}else if(k==KeyEvent.VK_DOWN) {
+				player.setVelY(3);
+			}else if(k==KeyEvent.VK_UP) {
+				player.setVelY(-3);
+			}else if(k==KeyEvent.VK_SPACE && !isShooting) {
+				isShooting=true;
+				entityController.addBullet(new Bullet(player.getX(), player.getY(), tex,this));		
+			}
 		}
+		
 		
 	}
 	public void keyReleased(KeyEvent e) {
 		int k= e.getKeyCode();
-
-		//System.out.println(player.getX() +" "+ player.getY());
-		if(k==KeyEvent.VK_RIGHT) {
-			player.setVelX(0);
-		}else if(k==KeyEvent.VK_LEFT) {
-			player.setVelX(0);
-		}else if(k==KeyEvent.VK_DOWN) {
-			player.setVelY(0);
-		}else if(k==KeyEvent.VK_UP) {
-			player.setVelY(0);
-		}else if(k==KeyEvent.VK_SPACE) {
-			isShooting=false;
+		if(currentGameState==GameState.IN_PLAY) {
+			if(k==KeyEvent.VK_RIGHT) {
+				player.setVelX(0);
+			}else if(k==KeyEvent.VK_LEFT) {
+				player.setVelX(0);
+			}else if(k==KeyEvent.VK_DOWN) {
+				player.setVelY(0);
+			}else if(k==KeyEvent.VK_UP) {
+				player.setVelY(0);
+			}else if(k==KeyEvent.VK_SPACE) {
+				isShooting=false;
+			}
 		}
+		//System.out.println(player.getX() +" "+ player.getY());
+
 		
 		
 	}
@@ -204,5 +228,14 @@ public class Game extends Canvas implements Runnable {
 	public BufferedImage getSpriteSheet() {
 		return spriteSheet;
 	}
+
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
+
 
 }
