@@ -25,24 +25,19 @@ import javax.imageio.ImageIO;
 	        // Try to open the image file background.png
 	        BufferedImageLoader loader= new BufferedImageLoader();
 			try {
-				image = loader.loadImage("background_1.png");
+				//image = loader.loadImage("res/bg.png");
+				image = loader.loadImage("res/bgcolor.png");
 			} catch (IOException e) {
-				// TODO: handle exception
 				e.printStackTrace();
 			}
 	    }
-	 
-	    /**
-	     * Method that draws the image onto the Graphics object passed
-	     * @param window
-	     */
 	    public void draw(Graphics window) {
 	 
 	        // Draw the image onto the Graphics reference
 	        window.drawImage(image, (int)getX(), (int)getY(), image.getWidth(), image.getHeight(), null);
 	 
 	        // Move the x position left for next time
-	        this.x -= 5;
+	        this.x -= 1;
 	        
 	 
 	        // Check to see if the image has gone off stage left
@@ -64,5 +59,10 @@ import javax.imageio.ImageIO;
 	    public double getY() {
 	        return this.y;
 	    }
+
+		public double getWidth() {
+			// TODO Auto-generated method stub
+			return (double)this.image.getWidth();
+		}
 	 
 }

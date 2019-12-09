@@ -13,10 +13,12 @@ public class Bullet extends GameObject implements EntityA{
 	private Game game;
 	private Texture tex;
 	
+	
 	public Bullet (double x, double y,Texture tex,Game game) {
 		super(x,y);
 		this.tex=tex;
 		this.game=game;
+		
 		
 	}
 	public void tick() {
@@ -27,7 +29,7 @@ public class Bullet extends GameObject implements EntityA{
 //		}
 	}
 	public void render(Graphics g) {
-		g.drawImage(tex.bullet, (int)x,(int)y,null);
+		g.drawImage(tex.bullet.get(0), (int)x,(int)y,null);
 	}
 	public double getX() {
 		return x;
@@ -38,7 +40,7 @@ public class Bullet extends GameObject implements EntityA{
 	}public void setY(double y) {
 		this.y=y;
 	}public Rectangle getBounds() {
-		return new Rectangle((int)x,(int)y,50,50);
+		return new Rectangle((int)x,(int)y,10,3);
 	}
 	
 }

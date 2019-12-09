@@ -3,6 +3,7 @@ package com.fp.spacewar.main;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import com.fp.spacewar.main.entity.EntityA;
 
@@ -17,17 +18,16 @@ public class BulletEnemy extends GameObject{
 		super(x,y);
 		this.tex=tex;
 		this.game=game;
+		//enemyBulletAnim= new Animation(tex);
 		
 	}
 	public void tick() {
 		x-=3;
-//		if(Physics.Collision(this, game.entityBList)) {
-//			System.out.println("Duar");
-//			
-//		}
+		
+
 	}
 	public void render(Graphics g) {
-		g.drawImage(tex.bullet, (int)x,(int)y,null);
+		g.drawImage(tex.bullet.get(0), (int)x,(int)y,null);
 	}
 	public double getX() {
 		return x;

@@ -15,12 +15,14 @@ public class Player extends GameObject{
 	private double velY=0;
 	private Texture tex;
 	private int score;
+	private Animation anim;
 
-	public Player(double x,double y,Texture tex) {
+	public Player(double x,double y,Texture tex,Game game) {
 		super(x,y);
 		this.healthPoint = 10;
 		this.tex=tex;
 		this.score=0;
+		anim= new Animation(tex.player,game);
 		
 		
 	}
@@ -33,11 +35,11 @@ public class Player extends GameObject{
 	public void tick() {
 		x+=velX;
 		y+=velY;
-
-		if(x>=1280-40)x=1280-40;
+		anim.tick();
+		if(x>=1280-50)x=1280-50;
 		if(x<=0)x=0;
 		if(y<=0)y=0;
-		if(y>=720-40)y=720-40;
+		if(y>=720-50)y=720-50;
 		if(this.healthPoint<=0) {
 			System.out.println("Mati");
 			Game.currentGameState=GameState.IN_GAMEOVER;
@@ -51,7 +53,8 @@ public class Player extends GameObject{
     	g.drawRect(0, 50, 200, 50);
     	String print = ""+ this.healthPoint;
     	g.drawString(print, 5, 90);
-		g.drawImage(tex.player, (int)x,(int)y,null);
+		//g.drawImage(tex.player.get(0), (int)x,(int)y,null);
+    	anim.drawAnimation(g, x, y);
 	}
 	
 	public void reduceHP(int damage) {

@@ -107,7 +107,7 @@ public class ScoreManager {
     	if(scores.isEmpty()) {
     		return 0;
     	}else {
-    		return scores.get(scores.size()-1).getScore();
+    		return scores.get(10).getScore();
     	}
     }
     public void render(Graphics g) {
@@ -121,6 +121,7 @@ public class ScoreManager {
     public void renderHOF(Graphics g) {
     	
     	loadScoreFile();
+    	//removesScore();
     	sort();
     	//g.drawRect(0, 0, 1280, 720);
 		Graphics2D g2d =(Graphics2D)g;
@@ -143,10 +144,6 @@ public class ScoreManager {
 				if(temp!=null) {
 					cetak= cetak +""+ temp.getScore();
 				}
-				else {
-					cetak= cetak+"";
-				}
-				
 			}
 			
 			

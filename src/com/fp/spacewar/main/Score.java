@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 public class Score implements Serializable{
     private int score;
-    private String nama;
+    private String nama="Tanpa Nama";
     
     public Score(int score) {
     	this.score=score;

@@ -16,6 +16,8 @@ import java.util.Timer;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import org.w3c.dom.css.RGBColor;
+
 import com.fp.spacewar.main.Game.GameState;
 //import com.fp.spacewar.main.entity.Controller;
 //import com.fp.spacewar.main.entity.EnemyController;
@@ -66,20 +68,21 @@ public class Game extends Canvas implements Runnable {
 		requestFocus();
 		BufferedImageLoader loader= new BufferedImageLoader();
 		try {
-			spriteSheet = loader.loadImage("SpriteSheet.png");
+			spriteSheet = loader.loadImage("res/Asset3.png");
 		} catch (IOException e) {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
+		
 		scoredSubmitted=false;
 		running=true;
 		addKeyListener(new KeyInput(this));
 		addMouseListener(new MouseAction(this));
 		tex= new Texture(this);
-		player = new Player(100,360,tex);
+		player = new Player(100,360,tex,this);
 		//bulletController = new Controller(this);
 		background1 = new Background();
-		background2 = new Background(2001,0);
+		background2 = new Background(background1.getWidth(),0);
 		myMenu = new Menu();
 		myScoreManager = new ScoreManager(this);
 		entityController = new EntityController(tex,this);
@@ -113,7 +116,7 @@ public class Game extends Canvas implements Runnable {
 		// TODO Auto-generated method stub
 		init();
 		long lastTime = System.nanoTime();
-		final double ammountOfTick = 60.0;
+		final double ammountOfTick = 90.0;
 		double ns=1000000000/ammountOfTick;
 		double delta=0;
 		int updates=0;
@@ -158,8 +161,10 @@ public class Game extends Canvas implements Runnable {
 		}
 		Graphics g =bs.getDrawGraphics();
 		///////////////////////////////
-		g.drawImage(image, 0,0,getWidth(),getHeight(),this);
+		Color nokia = new Color(115, 165, 130);
+		Graphics2D g2d = (Graphics2D) g;
 		
+		g.drawImage(image, 0,0,getWidth(),getHeight(),this);
 		if(currentGameState==GameState.IN_PLAY) {
 			background1.draw(g);
 			background2.draw(g);
@@ -206,7 +211,7 @@ public class Game extends Canvas implements Runnable {
 				player.setVelY(-3);
 			}else if(k==KeyEvent.VK_SPACE && !isShooting) {
 				isShooting=true;
-				entityController.addBullet(new Bullet(player.getX(), player.getY(), tex,this));		
+				entityController.addBullet(new Bullet(player.getX()+60, player.getY()+25, tex,this));		
 			}
 		}
 		if(currentGameState==GameState.IN_GAMEOVER) {
@@ -291,5 +296,13 @@ public class Game extends Canvas implements Runnable {
 		this.totalScore = totalScore;
 	}
 
+	public long getGameTime() {
+		return gameTime;
+	}
 
+	public void setGameTime(long gameTime) {
+		this.gameTime = gameTime;
+	}
+
+	
 }

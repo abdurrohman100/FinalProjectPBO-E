@@ -1,6 +1,8 @@
 package com.fp.spacewar.main;
 
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -25,12 +27,11 @@ public class EntityController {
 	Random random = new Random();
 	
 	public EntityController() {
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	public EntityController(Texture tex,Game game){
 		this.tex=tex;
-		
 		this.game=game;
 		createEnemy(4);
 	}
@@ -38,8 +39,7 @@ public class EntityController {
 	public void createEnemy(int enemy_count) { //spawn
 //			System.out.println("game tiuem"+game.gameTime);
 		for(int i=0;i<enemy_count;i++) {
-			addArmy(new Army(random.nextInt(2000 - 1250 + 1) + 1250, 
-					random.nextInt(600), tex,game,this,aggresivePoint));
+			addArmy(new Army(random.nextInt(2000 - 1250 + 1) + 1250,random.nextInt(600),tex,game,this, aggresivePoint));
 		}
 	}
 	
