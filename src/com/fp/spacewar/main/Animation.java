@@ -17,9 +17,7 @@ public class Animation {
 		animImage= anim.get(index);
 		this.game=game;
 	}
-//	public void nextImage() {
-//		animImage= anim.get((index+1)%anim.size());
-//	}
+
 	public void tick() {
 			//index=(int)game.pewaktu.getTime();
 			index++;

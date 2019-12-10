@@ -22,7 +22,6 @@ import com.fp.spacewar.main.Game.GameState;
 //import com.fp.spacewar.main.entity.Controller;
 //import com.fp.spacewar.main.entity.EnemyController;
 import com.fp.spacewar.main.entity.EntityA;
-import com.fp.spacewar.main.entity.EntityB;
 
 public class Game extends Canvas implements Runnable {
 	public static final int w =1280;
@@ -30,7 +29,7 @@ public class Game extends Canvas implements Runnable {
 	public final static String title = "Space Impact";
 	private boolean running= false;
 	private boolean scoredSubmitted= false;
-	private Thread thread,waktu;
+	private Thread thread,waktu,sound;
 	public TimerSendiri pewaktu;
 	public long gameTime;
 	private int totalScore;
@@ -46,7 +45,6 @@ public class Game extends Canvas implements Runnable {
 	private ScoreManager myScoreManager;
 	public static GameState currentGameState;
 	public LinkedList<EntityA> entityAList;
-	public LinkedList<EntityB> entityBList;
 	public static enum GameState{
 		IN_MENU,
 		IN_PLAY,
@@ -54,7 +52,10 @@ public class Game extends Canvas implements Runnable {
 		IN_HOF;
 
 	}
-	
+	private Sound bgmPlay;
+	private Sound bgmMenu;
+	private Sound bgmHOF;
+	private Sound shoot = new Sound("shoot.wav");
 	
 	
 	public Game() {
@@ -74,6 +75,7 @@ public class Game extends Canvas implements Runnable {
 			e.printStackTrace();
 		}
 		
+		currentGameState=GameState.IN_MENU;
 		scoredSubmitted=false;
 		running=true;
 		addKeyListener(new KeyInput(this));
@@ -86,9 +88,11 @@ public class Game extends Canvas implements Runnable {
 		myMenu = new Menu();
 		myScoreManager = new ScoreManager(this);
 		entityController = new EntityController(tex,this);
-		currentGameState=GameState.IN_MENU;
 		pewaktu.timerReset();
-	
+		bgmMenu = new Sound("Mainmenu.wav");
+		bgmHOF = new Sound("HallofFame.wav");
+		bgmPlay = new Sound("InGame.wav");
+		bgmPlay.setVolume(0.03F);
 	}
 	
 	public synchronized void start() {
@@ -96,7 +100,6 @@ public class Game extends Canvas implements Runnable {
 		running= true;
 		thread= new Thread(this);
 		thread.start();
-		
 		waktu = new Thread(pewaktu = new TimerSendiri());
 		waktu.start();
 		
@@ -161,23 +164,39 @@ public class Game extends Canvas implements Runnable {
 		}
 		Graphics g =bs.getDrawGraphics();
 		///////////////////////////////
-		Color nokia = new Color(115, 165, 130);
-		Graphics2D g2d = (Graphics2D) g;
 		
 		g.drawImage(image, 0,0,getWidth(),getHeight(),this);
 		if(currentGameState==GameState.IN_PLAY) {
+			if(!bgmPlay.isRunning()) {
+				bgmPlay.loop();
+				bgmHOF.stop();
+				bgmMenu.stop();
+			}
 			background1.draw(g);
 			background2.draw(g);
 			entityController.render(g);
 			player.render(g);
 			myScoreManager.render(g);
 		}if(currentGameState==GameState.IN_HOF) {
+			if(!bgmHOF.isRunning()) {
+				bgmPlay.stop();
+				bgmHOF.loop();
+				bgmMenu.stop();
+			}
 			myScoreManager.renderHOF(g);
 		}if(currentGameState==GameState.IN_MENU) {
+			if(!bgmMenu.isRunning()) {
+				bgmPlay.stop();;
+				bgmHOF.stop();
+				bgmMenu.loop();
+			}
+			bgmMenu.loop();
 			myMenu.render(g);
 		}if(currentGameState==GameState.IN_GAMEOVER) {
+			bgmPlay.stop();
+			bgmHOF.stop();
+			bgmMenu.stop();
 			drawGameOver(g);
-			//thread.sleep(arg0);
 		}
 		
 		
@@ -210,8 +229,10 @@ public class Game extends Canvas implements Runnable {
 			}else if(k==KeyEvent.VK_UP) {
 				player.setVelY(-3);
 			}else if(k==KeyEvent.VK_SPACE && !isShooting) {
+				entityController.addBullet(new Bullet(player.getX()+60, player.getY()+25, tex,this));	
+				shoot.restart();;
+				//shoot.stop();
 				isShooting=true;
-				entityController.addBullet(new Bullet(player.getX()+60, player.getY()+25, tex,this));		
 			}
 		}
 		if(currentGameState==GameState.IN_GAMEOVER) {
@@ -269,7 +290,7 @@ public class Game extends Canvas implements Runnable {
 		g.setFont(word);
 		String stringScore = " "+player.getScore();
 		g.drawString("Your score is"+stringScore , Game.w/2-150, 200);
-		if(totalScore>=myScoreManager.getLastTen()) {
+		if(myScoreManager.isTopTen(totalScore)) {
 			if(totalScore>=myScoreManager.getCurrentHS()) {
 				g.drawString("You got a new HighScore", Game.w/2-150, 250);
 				

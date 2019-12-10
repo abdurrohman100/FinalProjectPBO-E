@@ -103,12 +103,25 @@ public class ScoreManager {
     	}else {
     		return scores.get(0).getScore();
     	}
-    }public int getLastTen() {
+    }
+    public int getLastTen() {
+    	int scoresSize =scores.size();
+    	if(scoresSize>10)scoresSize=10;
     	if(scores.isEmpty()) {
     		return 0;
     	}else {
-    		return scores.get(10).getScore();
+    		return scores.get(scoresSize-1).getScore();
     	}
+    }
+    public boolean isTopTen(int score) {
+    	if(scores.size()<10) {
+    		return true;
+    	}else {
+    		if(score>this.getLastTen()) {
+    			return true;
+    		}
+    	}
+		return false;
     }
     public void render(Graphics g) {
 	    	Font title = new Font("SanSerif", Font.BOLD,36);

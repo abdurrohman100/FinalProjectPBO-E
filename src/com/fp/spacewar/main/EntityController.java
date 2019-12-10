@@ -7,7 +7,6 @@ import java.util.LinkedList;
 import java.util.Random;
 
 import com.fp.spacewar.main.entity.EntityA;
-import com.fp.spacewar.main.entity.EntityB;
 
 public class EntityController {
 
