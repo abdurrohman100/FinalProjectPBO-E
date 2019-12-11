@@ -148,8 +148,10 @@ public class ScoreManager {
 		g.drawString("Back", 25, 70);
 		Font optMenu = new Font("SanSerif", Font.BOLD,46);
 		g.setFont(optMenu);
-		
-		for(int i=0;i<scores.size();i++) {
+		int jumlahdisplay;
+		if(scores.size()<10)jumlahdisplay=scores.size();
+		else jumlahdisplay=10;
+		for(int i=0;i<jumlahdisplay;i++) {
 			String cetak="";
 			if(scores.size()!=0) {
 				Score temp= scores.get(i);

@@ -6,11 +6,13 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints.Key;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.Random;
 import java.util.Timer;
 
 import javax.swing.JFrame;
@@ -20,7 +22,7 @@ import org.w3c.dom.css.RGBColor;
 
 import com.fp.spacewar.main.Game.GameState;
 //import com.fp.spacewar.main.entity.Controller;
-//import com.fp.spacewar.main.entity.EnemyController;
+
 import com.fp.spacewar.main.entity.EntityA;
 
 public class Game extends Canvas implements Runnable {
@@ -45,17 +47,22 @@ public class Game extends Canvas implements Runnable {
 	private ScoreManager myScoreManager;
 	public static GameState currentGameState;
 	public LinkedList<EntityA> entityAList;
+	private int lastShooting;
+	private boolean adaSoal= false;
 	public static enum GameState{
 		IN_MENU,
 		IN_PLAY,
 		IN_GAMEOVER,
-		IN_HOF;
+		IN_HOF,
 
 	}
 	private Sound bgmPlay;
 	private Sound bgmMenu;
 	private Sound bgmHOF;
 	private Sound shoot = new Sound("shoot.wav");
+	private MathGenerator mg;
+	private boolean soalTerjawab=false;
+	private boolean soalBenar;
 	
 	
 	public Game() {
@@ -88,7 +95,7 @@ public class Game extends Canvas implements Runnable {
 		myMenu = new Menu();
 		myScoreManager = new ScoreManager(this);
 		entityController = new EntityController(tex,this);
-		pewaktu.timerReset();
+		//pewaktu.timerReset();
 		bgmMenu = new Sound("Mainmenu.wav");
 		bgmHOF = new Sound("HallofFame.wav");
 		bgmPlay = new Sound("InGame.wav");
@@ -171,14 +178,22 @@ public class Game extends Canvas implements Runnable {
 				bgmPlay.loop();
 				bgmHOF.stop();
 				bgmMenu.stop();
+				
 			}
 			background1.draw(g);
 			background2.draw(g);
 			entityController.render(g);
 			player.render(g);
 			myScoreManager.render(g);
+			if(adaSoal) {
+				
+				mg.render(g);
+				
+			}
+			
 		}if(currentGameState==GameState.IN_HOF) {
 			if(!bgmHOF.isRunning()) {
+				
 				bgmPlay.stop();
 				bgmHOF.loop();
 				bgmMenu.stop();
@@ -197,6 +212,7 @@ public class Game extends Canvas implements Runnable {
 			bgmHOF.stop();
 			bgmMenu.stop();
 			drawGameOver(g);
+			
 		}
 		
 		
@@ -229,10 +245,27 @@ public class Game extends Canvas implements Runnable {
 			}else if(k==KeyEvent.VK_UP) {
 				player.setVelY(-3);
 			}else if(k==KeyEvent.VK_SPACE && !isShooting) {
+				
+//				//lastShooting=
 				entityController.addBullet(new Bullet(player.getX()+60, player.getY()+25, tex,this));	
-				shoot.restart();;
-				//shoot.stop();
+				shoot.play();
+				shoot.click.setFramePosition(0);
 				isShooting=true;
+			}else if(k==KeyEvent.VK_ENTER) {
+				mg = new MathGenerator(3, this);
+				adaSoal=true;
+			}
+			if(adaSoal) {
+				int submitedAnswer;
+				if(k==KeyEvent.VK_1) {
+					soalBenar= mg.cekTrue(1);
+				}else if(k==KeyEvent.VK_2) {
+					soalBenar=mg.cekTrue(2);
+				}else if(k==KeyEvent.VK_3) {
+					soalBenar=mg.cekTrue(3);
+				}else if(k==KeyEvent.VK_4) {
+					soalBenar=mg.cekTrue(4);
+				}
 			}
 		}
 		if(currentGameState==GameState.IN_GAMEOVER) {
@@ -288,7 +321,7 @@ public class Game extends Canvas implements Runnable {
 		g.drawString("GameOver", Game.w/2-150, 100);
 		Font word = new Font("SanSerif", Font.BOLD,46);
 		g.setFont(word);
-		String stringScore = " "+player.getScore();
+		String stringScore = " "+totalScore;
 		g.drawString("Your score is"+stringScore , Game.w/2-150, 200);
 		if(myScoreManager.isTopTen(totalScore)) {
 			if(totalScore>=myScoreManager.getCurrentHS()) {
@@ -304,8 +337,6 @@ public class Game extends Canvas implements Runnable {
 			}	
 		}
 		g.drawString("Please Esc to return to main menu", Game.w/2-150, 400);
-		//currentGameState=GameState.IN_MENU;
-		
 		
 	}
 
@@ -325,5 +356,13 @@ public class Game extends Canvas implements Runnable {
 		this.gameTime = gameTime;
 	}
 
+	public TimerSendiri getPewaktu() {
+		return pewaktu;
+	}
+
+	public void setPewaktu(TimerSendiri pewaktu) {
+		this.pewaktu = pewaktu;
+	}
+	
 	
 }

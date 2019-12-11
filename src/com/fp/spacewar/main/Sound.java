@@ -45,6 +45,7 @@ public class Sound{
 	}
 	public void stop() {
 		click.stop();
+		click.setFramePosition(0);
 	}
 	public void loop() {
 		click.loop(Clip.LOOP_CONTINUOUSLY);
@@ -53,14 +54,8 @@ public class Sound{
 		if(click.isActive())return true;
 		else return false;	
 	}
-	public void restart() {
-		click.stop(); 
-        click.close(); 
-//        resetAudioStream(); 
-//        currentFrame = 0L; 
-        click.setMicrosecondPosition(0); 
-        this.play(); 
-		
+	public void setStart() {
+        click.setFramePosition(0);
 	}
 	
 	public float getVolume() {

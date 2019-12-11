@@ -65,7 +65,7 @@ public class EntityController {
 		if(armyList.size()>0) {
 			if((game.gameTime)%(2*(7-aggresivePoint))==0) {
 				flagBullet = true;
-				System.out.println("masuk gflasg");
+				
 			}
 			
 			if(flagBullet && (game.gameTime % (2*(7-aggresivePoint)) ==1)) {

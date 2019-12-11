@@ -21,7 +21,7 @@ public class Player extends GameObject{
 		super(x,y);
 		this.healthPoint = 10;
 		this.tex=tex;
-		//this.score=0;
+		this.score=0;
 		anim= new Animation(tex.player,game);
 		
 		

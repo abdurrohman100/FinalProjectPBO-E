@@ -6,8 +6,12 @@ public class TimerSendiri implements Runnable{
 	private long second;
 	private long i;
 	private void counter() throws InterruptedException {
-		
-			for (i =0; ;i++) {
+			boolean status = Game.currentGameState==GameState.IN_PLAY;
+			for (i =0;;i++) {
+				
+				System.out.println(status);
+				status=Game.currentGameState==GameState.IN_PLAY;
+				
 				second = i;
 				Thread.sleep(1000);
 				System.out.println("second" + second);
@@ -16,6 +20,7 @@ public class TimerSendiri implements Runnable{
 		
 	}
 	void timerReset() {
+		System.out.println("Reset");
 		second=0;
 		i=0;
 	}
@@ -27,12 +32,15 @@ public class TimerSendiri implements Runnable{
 	@Override
 	public void run() {
 		try {
-			System.out.println(Game.currentGameState);
-			//if(Game.currentGameState==GameState.IN_PLAY) {
-				
-				System.out.println("SASUU");
-				counter();
+			
+			//while(true) {
+				//if(Game.currentGameState==GameState.IN_PLAY) {
+					
+					//System.out.println("SASUU");
+					counter();
+				//}
 			//}
+			
 			
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block

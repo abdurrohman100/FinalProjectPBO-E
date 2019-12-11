@@ -40,6 +40,7 @@ public class MouseAction implements MouseListener{
 				if(mouseY>=300&&mouseY<=370) {
 					System.out.println("Play");
 					Game.currentGameState= Game.GameState.IN_PLAY;
+					game.getPewaktu().timerReset();
 				}
 				else if(mouseY>=400&&mouseY<=470) {
 					System.out.println("Hall of Fame");
