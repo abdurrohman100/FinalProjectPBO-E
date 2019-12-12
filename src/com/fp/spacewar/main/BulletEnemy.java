@@ -38,7 +38,7 @@ public class BulletEnemy extends GameObject{
 	}public void setY(double y) {
 		this.y=y;
 	}public Rectangle getBounds() {
-		return new Rectangle((int)x,(int)y,50,50);
+		return new Rectangle((int)x,(int)y,10,3);
 	}
 	
 }

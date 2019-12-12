@@ -1,6 +1,7 @@
 package com.fp.spacewar.main;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.util.Random;
 
 public class Boss extends Enemy{
@@ -16,8 +17,9 @@ public class Boss extends Enemy{
 		this.tex=tex;
 		this.entityController=entityController;
 		this.setAttackPoint(aggresivePoint+1);
-		anim=new Animation(tex.enemy,game);
-		this.setHealtPoint(aggresivePoint*2000);
+		anim=new Animation(tex.boss,game);
+		this.setHealtPoint(aggresivePoint*1000);
+		System.out.println("HAI BOSS");
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -27,7 +29,15 @@ public class Boss extends Enemy{
 		
 		if(x >=1260) {
 			x -= 3;
-		}else {
+		}else if(x<900) {
+			x+=2;
+		}
+		else if(y>650) {
+			y-=2;
+		}else if(y<100) {
+			y+=2;
+		}
+			else {
 			int tempTransformation = random.nextInt(4);
 			if(tempTransformation == 1) {
 				x -= 2;
@@ -49,6 +59,9 @@ public class Boss extends Enemy{
 	public void render(Graphics g) {
 		//g.drawImage(tex.enemy.get(0), (int)x,(int)y,null);
 		anim.drawAnimation(g, x, y);
+	}
+	public Rectangle getBounds() {
+		return new Rectangle((int)x,(int)y,250,250);
 	}
 	
 	

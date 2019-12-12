@@ -17,13 +17,14 @@ public class MathGenerator{
 	ArrayList<String> answer;
 	int difficulty=1;
 	DecimalFormat df = new DecimalFormat("###.##");
-	
+	Game game;
 	public MathGenerator(int aggresivePoint,Game game) {
 		this.difficulty = aggresivePoint;
 		answer = new ArrayList<String>();
 		findAllOperand();
 		findOperatorAndResult();
-		printString();
+		init();
+		this.game=game;
 	}
 	
 	private static int randomGenerator(int min, int max) {
@@ -57,7 +58,7 @@ public class MathGenerator{
 		}			
 	}
 	
-	public void printString() {
+	public void init() {
 		question = (Integer.toString(operand1).concat(" " +operator+ " "+operand2 + " ="));
 		trueOption = randomGenerator(1, 4);
 		
@@ -75,32 +76,31 @@ public class MathGenerator{
 			}		
 		}
 		
-		System.out.println(question);
+		//System.out.println(question);
 		for(int i=0;i<4;i++) {
 			System.out.println(answer.get(i));
 			
 		}
-		System.out.println(trueOption +" "+ resultInt +" "+tempOperator);
+		//System.out.println(trueOption +" "+ resultInt +" "+tempOperator);
 //		System.out.println(this.operand1 +" "+this.operator+" "+this.operand2+" = "+this.result);
 	}
 	
 	public void render(Graphics g) {
-		question = (Integer.toString(operand1).concat(" " +operator+ " "+operand2 + " ="));
-		trueOption = randomGenerator(1, 4);
 		
-		for (int i = 0; i <4;i++) {
-			if((i+1) == trueOption) {
-				this.answer.add(Integer.toString(resultInt));
-			}
-			else {
-				
-				int tempResult = randomGenerator(this.resultInt-20, this.resultInt+20);
-				if(tempResult == resultInt) {
-					tempResult += 1;
-				}
-				this.answer.add(Integer.toString(tempResult));
-			}		
-		}
+//		
+//		for (int i = 0; i <4;i++) {
+//			if((i+1) == trueOption) {
+//				this.answer.add(Integer.toString(resultInt));
+//			}
+//			else {
+//				
+//				int tempResult = randomGenerator(this.resultInt-20, this.resultInt+20);
+//				if(tempResult == resultInt) {
+//					tempResult += 1;
+//				}
+//				this.answer.add(Integer.toString(tempResult));
+//			}		
+//		}
 		Font questionFont = new Font("SanSerif", Font.ITALIC, 54);
 		g.setFont(questionFont);
 		g.setColor(Color.WHITE);
@@ -114,12 +114,14 @@ public class MathGenerator{
 		//System.out.println(trueOption +" "+ resultInt +" "+tempOperator);
 
 	}
-	public boolean cekTrue(int submited) {
-		if(trueOption==submited) {
-			return true;
+	public void cekTrue(int submited) {
+		System.out.println("jawaban"+trueOption + " input"+submited);
+		if(trueOption==submited&&submited!=0) {
+			game.getPlayer().setScore(game.getPlayer().getScore()+20);
 		}
-		else {
-			return false;
+		else if (trueOption!=submited&&submited!=0) {
+			System.out.println("difficilty"+difficulty);
+			game.getPlayer().healthPoint-= 2 * difficulty;
 		}
 	}
 }

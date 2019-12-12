@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class Texture {
 
-		public ArrayList<BufferedImage> player,bullet,enemy;
+		public ArrayList<BufferedImage> player,bullet,enemy,boss;
 		private SpriteSheet ss;
 		public Texture(Game game) {
 			ss = new SpriteSheet(game.getSpriteSheet());
@@ -16,6 +16,7 @@ public class Texture {
 			player=ss.grabSprite(0, 0, 50, 50, 20);
 			enemy=ss.grabSprite(0, 50, 40, 40, 3);
 			bullet=ss.grabSprite(0, 122,10,3,1);
+			boss=ss.grabSprite(0, 125+32, 250, 250, 4);
 		}
 		
 }

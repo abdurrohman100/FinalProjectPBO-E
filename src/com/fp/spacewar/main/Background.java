@@ -26,7 +26,7 @@ import javax.imageio.ImageIO;
 	        BufferedImageLoader loader= new BufferedImageLoader();
 			try {
 				//image = loader.loadImage("res/bg.png");
-				image = loader.loadImage("res/bgcolor.png");
+				image = loader.loadImage("res/bg-Recovered.png");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

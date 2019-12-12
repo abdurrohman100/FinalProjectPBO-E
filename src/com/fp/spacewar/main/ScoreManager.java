@@ -162,7 +162,7 @@ public class ScoreManager {
 			}
 			
 			
-			g2d.draw(new Rectangle(Game.w/2-100,150+i*50,200,50));
+			//g2d.draw(new Rectangle(Game.w/2-100,150+i*50,200,50));
 			g.drawString(cetak, Game.w/2-100, 150+i*50+55);
 		}
     }

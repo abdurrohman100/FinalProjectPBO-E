@@ -27,9 +27,9 @@ import com.fp.spacewar.main.entity.EntityA;
 
 public class Game extends Canvas implements Runnable {
 	public static final int w =1280;
-	public static final int h =720;
+	public static final int h =700;
 	public final static String title = "Space Impact";
-	private boolean running= false;
+	private boolean running= false, tidakJawab;
 	private boolean scoredSubmitted= false;
 	private Thread thread,waktu,sound;
 	public TimerSendiri pewaktu;
@@ -47,7 +47,7 @@ public class Game extends Canvas implements Runnable {
 	private ScoreManager myScoreManager;
 	public static GameState currentGameState;
 	public LinkedList<EntityA> entityAList;
-	private int lastShooting;
+	private long lastShooting, timeSoal;
 	private boolean adaSoal= false;
 	public static enum GameState{
 		IN_MENU,
@@ -56,9 +56,11 @@ public class Game extends Canvas implements Runnable {
 		IN_HOF,
 
 	}
-	private Sound bgmPlay;
-	private Sound bgmMenu;
-	private Sound bgmHOF;
+
+	private Sound bgmMenu = new Sound("mainmenu.wav");
+	private Sound bgmHOF = new Sound("HallofFame.wav");
+	private Sound bgmPlay = new Sound("ingame.wav");
+	private Sound bgmGameOver = new Sound("gameovverwav.wav");
 	private Sound shoot = new Sound("shoot.wav");
 	private MathGenerator mg;
 	private boolean soalTerjawab=false;
@@ -71,12 +73,12 @@ public class Game extends Canvas implements Runnable {
 		this.setMinimumSize(new Dimension (w,h));
 		
 	}
-
+	
 	public void init() {
 		requestFocus();
 		BufferedImageLoader loader= new BufferedImageLoader();
 		try {
-			spriteSheet = loader.loadImage("res/Asset3.png");
+			spriteSheet = loader.loadImage("res/asset6.png");
 		} catch (IOException e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -85,21 +87,18 @@ public class Game extends Canvas implements Runnable {
 		currentGameState=GameState.IN_MENU;
 		scoredSubmitted=false;
 		running=true;
+		adaSoal=false;
 		addKeyListener(new KeyInput(this));
 		addMouseListener(new MouseAction(this));
 		tex= new Texture(this);
 		player = new Player(100,360,tex,this);
-		//bulletController = new Controller(this);
 		background1 = new Background();
 		background2 = new Background(background1.getWidth(),0);
 		myMenu = new Menu();
 		myScoreManager = new ScoreManager(this);
 		entityController = new EntityController(tex,this);
-		//pewaktu.timerReset();
-		bgmMenu = new Sound("Mainmenu.wav");
-		bgmHOF = new Sound("HallofFame.wav");
-		bgmPlay = new Sound("InGame.wav");
-		bgmPlay.setVolume(0.03F);
+		bgmPlay.setVolume(0.21F);
+		bgmGameOver.setVolume(1F);
 	}
 	
 	public synchronized void start() {
@@ -147,11 +146,19 @@ public class Game extends Canvas implements Runnable {
 				delta--;
 			}
 			
-			if((pewaktu.getTime() % 5) == 0 && pewaktu.getTime() !=  0) {
+			if((pewaktu.getTime() % 15) == 0 && pewaktu.getTime() !=  0&& currentGameState==GameState.IN_PLAY) {
+				System.out.println();
 				mg = new MathGenerator(entityController.getAggresivePoint(), this);
 				adaSoal=true;
+				timeSoal = pewaktu.getTime();
+				tidakJawab = false;
 			}
-//			
+			if(timeSoal + 5 == pewaktu.getTime() && tidakJawab == false) {
+				adaSoal = false;
+				player.healthPoint-=2*entityController.getAggresivePoint();
+				tidakJawab = true;
+			}
+
 		
 			render();
 			frames++;
@@ -179,11 +186,12 @@ public class Game extends Canvas implements Runnable {
 		
 		g.drawImage(image, 0,0,getWidth(),getHeight(),this);
 		if(currentGameState==GameState.IN_PLAY) {
+			bgmHOF.stop();
+			bgmMenu.stop();
+			bgmGameOver.stop();
 			if(!bgmPlay.isRunning()) {
-				bgmPlay.loop();
-				bgmHOF.stop();
-				bgmMenu.stop();
 				
+				bgmPlay.loop();
 			}
 			background1.draw(g);
 			background2.draw(g);
@@ -197,25 +205,27 @@ public class Game extends Canvas implements Runnable {
 			}
 			
 		}if(currentGameState==GameState.IN_HOF) {
+			bgmGameOver.stop();
+			bgmPlay.stop();
+			bgmMenu.stop();
 			if(!bgmHOF.isRunning()) {
-				
-				bgmPlay.stop();
 				bgmHOF.loop();
-				bgmMenu.stop();
 			}
 			myScoreManager.renderHOF(g);
 		}if(currentGameState==GameState.IN_MENU) {
+			bgmPlay.stop();
+			bgmHOF.stop();
+			bgmGameOver.stop();
 			if(!bgmMenu.isRunning()) {
-				bgmPlay.stop();;
-				bgmHOF.stop();
 				bgmMenu.loop();
 			}
-			bgmMenu.loop();
 			myMenu.render(g);
 		}if(currentGameState==GameState.IN_GAMEOVER) {
 			bgmPlay.stop();
 			bgmHOF.stop();
 			bgmMenu.stop();
+			bgmGameOver.play();
+			
 			drawGameOver(g);
 			
 		}
@@ -257,36 +267,33 @@ public class Game extends Canvas implements Runnable {
 				shoot.click.setFramePosition(0);
 				isShooting=true;
 			}else if(k==KeyEvent.VK_ENTER) {
-//				mg = new MathGenerator(3, this);
-//				adaSoal=true;
+				mg = new MathGenerator(entityController.getAggresivePoint(), this);
+				adaSoal=true;
 			}
 			if(adaSoal) {
-				int submitedAnswer;
+				int submitedAnswer=0;
 				if(k==KeyEvent.VK_1) {
-					if(mg.cekTrue(1)) {
-						System.out.println("Mausk 111");
-						player.setScore(player.getScore()+10+1000);
-					}
-					adaSoal = false;
+					submitedAnswer=1;
+					adaSoal=false;
 				}else if(k==KeyEvent.VK_2) {
-					if(mg.cekTrue(2)) {
-						System.out.println("Mausk 222");
-						player.setScore(player.getScore()+10+1000);
-					}
-					adaSoal = false;
+
+						submitedAnswer=2;
+						adaSoal=false;
+
 				}else if(k==KeyEvent.VK_3) {
-					if(mg.cekTrue(3)) {
-						System.out.println("Mausk 222");
-						player.setScore(player.getScore()+10+1000);
-					}
-					adaSoal = false;
+	
+						submitedAnswer=3;
+						adaSoal=false;
+				
 				}else if(k==KeyEvent.VK_4) {
-					if(mg.cekTrue(4)) {
-						System.out.println("Mausk 444");
-						player.setScore(player.getScore()+10+1000);
-					}
-					adaSoal = false;
+
+						submitedAnswer=4;
+						adaSoal=false;
+					
+					
 				}
+				mg.cekTrue(submitedAnswer);
+				submitedAnswer=0;
 			}
 		}
 		if(currentGameState==GameState.IN_GAMEOVER) {
