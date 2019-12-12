@@ -146,6 +146,11 @@ public class Game extends Canvas implements Runnable {
 				updates++;
 				delta--;
 			}
+			
+			if((pewaktu.getTime() % 5) == 0 && pewaktu.getTime() !=  0) {
+				mg = new MathGenerator(entityController.getAggresivePoint(), this);
+				adaSoal=true;
+			}
 //			
 		
 			render();
@@ -237,13 +242,13 @@ public class Game extends Canvas implements Runnable {
 		int k= e.getKeyCode();
 		if(currentGameState==GameState.IN_PLAY) {
 			if(k==KeyEvent.VK_RIGHT) {
-				player.setVelX(6);
+				player.setVelX(4);
 			}else if(k==KeyEvent.VK_LEFT) {
-				player.setVelX(-6);
+				player.setVelX(-4);
 			}else if(k==KeyEvent.VK_DOWN) {
-				player.setVelY(3);
+				player.setVelY(2.5);
 			}else if(k==KeyEvent.VK_UP) {
-				player.setVelY(-3);
+				player.setVelY(-2.5);
 			}else if(k==KeyEvent.VK_SPACE && !isShooting) {
 				
 //				//lastShooting=
@@ -252,19 +257,35 @@ public class Game extends Canvas implements Runnable {
 				shoot.click.setFramePosition(0);
 				isShooting=true;
 			}else if(k==KeyEvent.VK_ENTER) {
-				mg = new MathGenerator(3, this);
-				adaSoal=true;
+//				mg = new MathGenerator(3, this);
+//				adaSoal=true;
 			}
 			if(adaSoal) {
 				int submitedAnswer;
 				if(k==KeyEvent.VK_1) {
-					soalBenar= mg.cekTrue(1);
+					if(mg.cekTrue(1)) {
+						System.out.println("Mausk 111");
+						player.setScore(player.getScore()+10+1000);
+					}
+					adaSoal = false;
 				}else if(k==KeyEvent.VK_2) {
-					soalBenar=mg.cekTrue(2);
+					if(mg.cekTrue(2)) {
+						System.out.println("Mausk 222");
+						player.setScore(player.getScore()+10+1000);
+					}
+					adaSoal = false;
 				}else if(k==KeyEvent.VK_3) {
-					soalBenar=mg.cekTrue(3);
+					if(mg.cekTrue(3)) {
+						System.out.println("Mausk 222");
+						player.setScore(player.getScore()+10+1000);
+					}
+					adaSoal = false;
 				}else if(k==KeyEvent.VK_4) {
-					soalBenar=mg.cekTrue(4);
+					if(mg.cekTrue(4)) {
+						System.out.println("Mausk 444");
+						player.setScore(player.getScore()+10+1000);
+					}
+					adaSoal = false;
 				}
 			}
 		}

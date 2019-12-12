@@ -236,4 +236,8 @@ public class EntityController {
 		  }
 	 }
 	
+	public int getAggresivePoint() {
+		return aggresivePoint;
+	}
+	
 }
