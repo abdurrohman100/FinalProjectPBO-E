@@ -88,11 +88,11 @@ public class MathGenerator{
 	public void cekTrue(int submited) {
 		System.out.println("jawaban"+trueOption + " input"+submited);
 		if(trueOption==submited&&submited!=0) {
-			game.getPlayer().setScore(game.getPlayer().getScore()+20);
+			game.getPlayer().setScore(game.getPlayer().getScore()+100);
 		}
 		else if (trueOption!=submited&&submited!=0) {
 			System.out.println("difficilty"+difficulty);
-			game.getPlayer().healthPoint-= 2 * difficulty;
+			game.getPlayer().healthPoint-= 3 * difficulty;
 		}
 	}
 }

@@ -64,7 +64,7 @@ public class Game extends Canvas implements Runnable {
 	private boolean adaSoal= false;
 	private MathGenerator mg;
 	private long timeSoal;
-	private boolean running= false, tidakJawab;
+	private boolean running= false, tidakJawab=true;
 	private boolean scoredSubmitted= false;
 
 	
@@ -150,7 +150,7 @@ public class Game extends Canvas implements Runnable {
 			}
 			if(timeSoal + 5 == pewaktu.getTime() && tidakJawab == false) {
 				adaSoal = false;
-				player.healthPoint-=2*entityController.getAggresivePoint();
+				player.healthPoint-=4*entityController.getAggresivePoint();
 				tidakJawab = true;
 			}
 
@@ -341,21 +341,21 @@ public class Game extends Canvas implements Runnable {
 		Font word = new Font("SanSerif", Font.BOLD,46);
 		g.setFont(word);
 		String stringScore = " "+totalScore;
-		g.drawString("Your score is"+stringScore , Game.w/2-150, 200);
+		g.drawString("Your score is"+stringScore , Game.w/2-450, 200);
 		if(myScoreManager.isTopTen(totalScore)) {
 			if(totalScore>=myScoreManager.getCurrentHS()) {
-				g.drawString("You got a new HighScore", Game.w/2-150, 250);
+				g.drawString("You got a new HighScore", Game.w/2-450, 250);
 				
 			}
 			else {
-				g.drawString("You rank in top 10", Game.w/2-150, 250);
+				g.drawString("You rank in top 10", Game.w/2-450, 250);
 			}
 			
 			if(!scoredSubmitted) {
-				g.drawString("Please press space to input your name", Game.w/2-150, 300);
+				g.drawString("Please press space to input your name", Game.w/2-450, 300);
 			}	
 		}
-		g.drawString("Please Esc to return to main menu", Game.w/2-150, 400);
+		g.drawString("Please Esc to return to main menu", Game.w/2-450, 400);
 		
 	}
 

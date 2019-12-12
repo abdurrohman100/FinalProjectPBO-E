@@ -16,8 +16,8 @@ public class EntityController {
 	boolean sudahkeluar, flagBullet;
 	
 	Texture tex;
-	Army tempEntityA;
-	Bullet tempEntityB;
+	Army tempArmy;
+	Bullet tempBullet;
 	
 	private int aggresivePoint;
 	
@@ -40,17 +40,14 @@ public class EntityController {
 	}
 	
 	public void createArmyBullet(Army army) {
-		System.out.println("TEMBAK!");
 		bulletEnemyList.add(new BulletEnemy(army.x, army.y, tex));
-//		for(int i = 0;i<)
 	}
 	
 	public void createBossBullet(Boss boss) {
-		System.out.println("TEMBAK BOSS!");
 		int a = 1;
 		for(int i = 0; i<10 && bosMati == false ;i++) {
 			bulletEnemyList.add(new BulletEnemy(boss.x, boss.y+100+(i*10*a), tex));
-			//bulletEnemyList.add(new BulletEnemy(boss.x, boss.y-(i*10*a), tex, game));
+
 			a *= -1;
 		}
 	}
@@ -93,21 +90,19 @@ public class EntityController {
 			}
 			
 			if(flagBullet && (game.gameTime % (2*(7-aggresivePoint)) ==1)) {
-				System.out.println("tembakkk");
 				flagBullet = false;
 			
 				
 				int rand22 = random.nextInt((armyList.size()+1)+0);
 				
 				rand22 = ((armyList.size()-rand22)*aggresivePoint);
-				System.out.println("rand"+rand22);
+				
 				if(rand22>armyList.size())
 					rand22 = armyList.size();
-				System.out.println("rannds22  " + rand22);
 				for(int i = armyList.size()-rand22-1;i>=0;i--) {
 					createArmyBullet(armyList.get(i));
 				}
-				System.out.println("size byileira"+ bulletEnemyList.size());
+				//System.out.println("size byileira"+ bulletEnemyList.size());
 			}
 		}
 		
@@ -131,13 +126,11 @@ public class EntityController {
 		collision(armyList, bulletList);
 		
 		for(int i=0;i<armyList.size();i++) {
-			tempEntityA= armyList.get(i);
-			tempEntityA.tick();
+			tempArmy= armyList.get(i);
+			tempArmy.tick();
 		}
-		//B Class
 		for(int i=0;i<bulletList.size();i++) {
 			bulletList.get(i).tick();
-//			tempEntityB.tick();
 		}
 		
 		for(int i=0;i<bulletEnemyList.size();i++) {
@@ -149,13 +142,13 @@ public class EntityController {
 	public void render(Graphics g) {
 		//A class
 		for(int i=0;i<armyList.size();i++) {
-			tempEntityA= armyList.get(i);
-			tempEntityA.render(g);
+			tempArmy= armyList.get(i);
+			tempArmy.render(g);
 		}
 		//B class
 		for(int i=0;i<bulletList.size();i++) {
-			tempEntityB= bulletList.get(i);
-			tempEntityB.render(g);
+			tempBullet= bulletList.get(i);
+			tempBullet.render(g);
 		}
 		
 		for(int i=0;i<bulletEnemyList.size();i++) {
@@ -199,9 +192,7 @@ public class EntityController {
 	//enemy bullet hit player
 	public void collision(Player player, LinkedList<BulletEnemy> bulletList2) {
 		for(int a=0;a<bulletList2.size();a++) {
-//			System.out.println("nanana");
 			if((player.getBounds()).intersects(bulletList2.get(a).getBounds())) {
-				System.out.println("deavg HOP" + player.healthPoint);
 				bulletList2.remove(a);
 				player.reduceHP(2*aggresivePoint);
 			}
@@ -214,11 +205,8 @@ public class EntityController {
 				game.getPlayer().setScore(game.getPlayer().getScore()+2);
 				boss2.setHealtPoint(boss2.getHealtPoint()-25);
 				bulletList2.remove(a);
-				System.out.println("Boss HIt");
-				System.out.println(boss.getHealtPoint());
 				if(boss.getHealtPoint()<=0) {
 					bosMati = true;	
-					System.out.println("MATI KAU");
 					if(bosMati == true)
 						game.getPlayer().setScore(game.getPlayer().getScore() + 110);
 				}
@@ -229,7 +217,7 @@ public class EntityController {
 	//enemy hit player
 	public void collisionObject(Player player, LinkedList<Army> armylist2) {
 		for(int a=0;a<armylist2.size();a++) {
-//			System.out.println("nanana");
+
 			if((player.getBounds()).intersects(armylist2.get(a).getBounds())) {
 				armylist2.remove(a);
 				player.reduceHP(3*aggresivePoint);

@@ -126,7 +126,7 @@ public class ScoreManager {
     public void render(Graphics g) {
 	    	Font title = new Font("SanSerif", Font.BOLD,36);
 			g.setFont(title);
-    		g.setColor(Color.BLUE);	
+    		g.setColor(Color.WHITE);	
         	g.drawRect(0, 0, 300, 50);
         	String print = "Score : "+ this.activeScore;
         	g.drawString(print, 5, 40);
@@ -140,7 +140,7 @@ public class ScoreManager {
 		Graphics2D g2d =(Graphics2D)g;
 		Font title = new Font("SanSerif", Font.BOLD,66);
 		g.setFont(title);
-		g.setColor(Color.WHITE	);
+		g.setColor(Color.WHITE);
 		g.drawString("Hall of Fame", Game.w/2-150, 100);
 		Font back = new Font("SanSerif", Font.BOLD,20);
 		g.setFont(back);

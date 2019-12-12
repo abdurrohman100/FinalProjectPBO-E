@@ -46,8 +46,8 @@ public class Player extends GameObject{
 	public void render(Graphics g) {
     	Font title = new Font("SanSerif", Font.BOLD,36);
 		g.setFont(title);
-		g.setColor(Color.BLUE);	
-    	String printLive = "Life: "+ this.healthPoint;
+		g.setColor(Color.WHITE);	
+    	String printLive = "HP: "+ this.healthPoint;
     	g.drawRect(0, 50, 200, 50);
     	g.drawString(printLive, 5, 90);
     	String printLevel = "Level: "+ game.getEntityController().getAggresivePoint() ;

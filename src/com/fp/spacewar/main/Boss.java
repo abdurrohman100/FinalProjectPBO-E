@@ -1,5 +1,7 @@
 package com.fp.spacewar.main;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.Random;
@@ -22,7 +24,7 @@ public class Boss extends Enemy{
 		super(posX, posY);
 		this.setAttackPoint(aggresivePoint+1);
 		anim=new Animation(tex.boss);
-		this.setHealtPoint(aggresivePoint*1000);
+		this.setHealtPoint(aggresivePoint*2000);
 	}
 	
 	
@@ -50,6 +52,11 @@ public class Boss extends Enemy{
 	 */
 	public void render(Graphics g) {
 		anim.drawAnimation(g, x, y);
+    	Font title = new Font("SanSerif", Font.BOLD,36);
+		g.setFont(title);
+		g.setColor(Color.WHITE);
+		String hpBos="BOSS : "+this.getHealtPoint();
+		g.drawString(hpBos, 1000, 50);
 	}
 	/**Fungsi untuk mendapat boundaries persegi dari sprite Boss
 	 *
