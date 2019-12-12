@@ -13,6 +13,7 @@ public class EntityController {
 	private LinkedList<Army> armyList = new LinkedList<Army>();
 	private LinkedList<Bullet> bulletList = new LinkedList<Bullet>();
 	private LinkedList<BulletEnemy> bulletEnemyList = new LinkedList<BulletEnemy>();
+	private Boss boss;
 	Game game;
 	
 	boolean sudahkeluar, flagBullet;
@@ -48,11 +49,21 @@ public class EntityController {
 //		for(int i = 0;i<)
 	}
 	
+	public void createBossBullet(Boss boss) {
+		System.out.println("TEMBAK BOSS!");
+		int a = 1;
+		for(int i = 0; i<10;i++) {
+			bulletEnemyList.add(new BulletEnemy(boss.x, boss.y+(i*10*a), tex, game));
+			bulletEnemyList.add(new BulletEnemy(boss.x, boss.y-(i*10*a), tex, game));
+			a *= -1;
+		}
+		
+//		for(int i = 0;i<)
+	}
+	
 	public void tick() {
 		compAggresivePoint();
 		
-		
-//		System.out.println("jml army" + armyList.size());
 		//spawn enemy
 		if(game.gameTime%10 == 0)
 			sudahkeluar = true;
@@ -60,12 +71,22 @@ public class EntityController {
 				createEnemy(totalSpawnPer10sec());
 				sudahkeluar = false;
 		}
+		
+		if(game.getTotalScore() % 300 == 0) {
+			
+		}
 				
 		//spawn enemy bullet
-		if(armyList.size()>0) {
+		if(armyList.size()>0 || boss != null) {
 			if((game.gameTime)%(2*(7-aggresivePoint))==0) {
 				flagBullet = true;
 				
+			}
+			
+			if(boss != null) {
+				if (game.getGameTime() % (15-aggresivePoint) == 0) {
+					createBossBullet(boss);
+				}
 			}
 			
 			if(flagBullet && (game.gameTime % (2*(7-aggresivePoint)) ==1)) {
@@ -83,6 +104,11 @@ public class EntityController {
 				}
 				System.out.println("size byileira"+ bulletEnemyList.size());
 			}
+		}
+		
+		//spawn Boss every score 300
+		if(game.getTotalScore() % 300 == 0 && game.getTotalScore() != 0 && boss != null) {
+			boss = new Boss(1350, 350, tex, game, this, aggresivePoint);
 		}
 		
 		
@@ -113,8 +139,6 @@ public class EntityController {
 		for(int i=0;i<bulletEnemyList.size();i++) {
 			bulletEnemyList.get(i).tick();
 		}
-		
-
 	}
 	
 
@@ -176,6 +200,18 @@ public class EntityController {
 			}
 		}
 	}
+
+	public void collision(Boss boss2, LinkedList<Bullet> bulletList2) {
+		for(int a=0;a<bulletList2.size();a++) {
+			
+			if((boss2.getBounds()).intersects(bulletList2.get(a).getBounds())) {
+				game.getPlayer().setScore(game.getPlayer().getScore()+2);
+				boss2.setHealtPoint(boss2.getHealtPoint()-25);
+				if(boss.getHealtPoint()<=0)
+					boss2 = null;	
+			}
+		}
+	}
 	
 	//enemy hit player
 	public void collisionObject(Player player, LinkedList<Army> armylist2) {
@@ -189,32 +225,6 @@ public class EntityController {
 		}
 	}
 	
-	//enemy bullet hit player
-//	public void collision(Player player, LinkedList<Army> army) {
-//			for(int a=0;a<army.size();a++) {
-//				if((player.getBounds()).intersects(bulletList2.get(a).getBounds())) {
-//					player.reduceHP(2*aggresivePoint);
-//				}
-//			}
-//		}
-	
-//	public void collision(LinkedList<Army> armyList2, LinkedList<Bullet> bulletList2) {
-//		for(int a=0;a<bulletList2.size();a++) {
-//			for(int b=0; b<armyList2.size();b++) {
-//				if((armyList2.get(b).getBounds()).intersects(bulletList2.get(a).getBounds())) {
-//					return true;
-//				}
-//				
-//			}
-//		}
-//		return false;
-//	}
-//	public LinkedList<EntityA> getEntityAList() {
-//		return entityAList;
-//	}
-//	public LinkedList<EntityB> getEntityBList() {
-//		return bulletList;
-//	}
 	
 	private int totalSpawnPer10sec() {
 		return aggresivePoint*8;

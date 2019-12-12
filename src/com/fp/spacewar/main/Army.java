@@ -37,9 +37,8 @@ public class Army extends Enemy {
 //			entityController.removeEntity(this);
 //		}
 		
-		
-	
 	}
+	
 	public void render(Graphics g) {
 		//g.drawImage(tex.enemy.get(0), (int)x,(int)y,null);
 		anim.drawAnimation(g, x, y);
