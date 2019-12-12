@@ -16,12 +16,14 @@ public class Player extends GameObject{
 	private Texture tex;
 	private int score=0;
 	private Animation anim;
+	Game game;
 
 	public Player(double x,double y,Texture tex,Game game) {
 		super(x,y);
 		this.healthPoint = 100;
 		this.tex=tex;
 		this.score=0;
+		this.game=game;
 		anim= new Animation(tex.player,game);
 		
 		
@@ -50,9 +52,12 @@ public class Player extends GameObject{
     	Font title = new Font("SanSerif", Font.BOLD,36);
 		g.setFont(title);
 		g.setColor(Color.BLUE);	
+    	String printLive = "Life: "+ this.healthPoint;
     	g.drawRect(0, 50, 200, 50);
-    	String print = ""+ this.healthPoint;
-    	g.drawString(print, 5, 90);
+    	g.drawString(printLive, 5, 90);
+    	String printLevel = "Level: "+ game.getEntityController().getAggresivePoint() ;
+    	g.drawRect(0, 100, 200, 50);
+    	g.drawString(printLevel, 5, 140);
 		//g.drawImage(tex.player.get(0), (int)x,(int)y,null);
     	anim.drawAnimation(g, x, y);
 	}

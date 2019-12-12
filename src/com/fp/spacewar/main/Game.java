@@ -391,6 +391,10 @@ public class Game extends Canvas implements Runnable {
 	public void setPewaktu(TimerSendiri pewaktu) {
 		this.pewaktu = pewaktu;
 	}
+
+	public EntityController getEntityController() {
+		return entityController;
+	}
 	
 	
 }

@@ -54,14 +54,13 @@ public class EntityController {
 		System.out.println("TEMBAK BOSS!");
 		int a = 1;
 		for(int i = 0; i<10 && bosMati == false ;i++) {
-			bulletEnemyList.add(new BulletEnemy(boss.x, boss.y+(i*10*a), tex, game));
-			bulletEnemyList.add(new BulletEnemy(boss.x, boss.y-(i*10*a), tex, game));
+			bulletEnemyList.add(new BulletEnemy(boss.x, boss.y+100+(i*10*a), tex, game));
+			//bulletEnemyList.add(new BulletEnemy(boss.x, boss.y-(i*10*a), tex, game));
 			a *= -1;
 		}
-		
-//		for(int i = 0;i<)
 	}
 	
+	boolean bosBulletFlag = true;
 	public void tick() {
 		compAggresivePoint();
 		if(boss!=null) {
@@ -79,7 +78,18 @@ public class EntityController {
 		if(game.getTotalScore() % 300 == 0) {
 			
 		}
-				
+			
+		
+		//spawn bullet boss
+		if(bosMati == false) {
+			if((game.getGameTime() % (15-aggresivePoint)) == 1)
+				bosBulletFlag = true;
+			if ((game.getGameTime() % (15-aggresivePoint) )== 0  && bosBulletFlag == true) {
+				createBossBullet(boss);
+				bosBulletFlag = false;
+			}
+		}
+		
 		//spawn enemy bullet
 		if(armyList.size()>0 || boss != null) {
 			if((game.gameTime)%(2*(7-aggresivePoint))==0) {
@@ -87,18 +97,10 @@ public class EntityController {
 				
 			}
 			
-			
-			
 			if(flagBullet && (game.gameTime % (2*(7-aggresivePoint)) ==1)) {
 				System.out.println("tembakkk");
 				flagBullet = false;
 			
-				//spawn bullet boss
-				if(bosMati == false && boss.getHealtPoint() > 0) {
-					if (flagBullet && game.getGameTime() % (15-aggresivePoint) == 0) {
-						createBossBullet(boss);
-					}
-				}
 				
 				int rand22 = random.nextInt((armyList.size()+1)+0);
 				
@@ -260,20 +262,16 @@ public class EntityController {
 		return aggresivePoint*8;
 	}
 	
+	boolean flagTime = true;
+	
 	public void compAggresivePoint() {
-		  if(game.gameTime <= 20) {
-		   this.aggresivePoint = 1;
-		  }else if(game.gameTime <= 30) {
-		   this.aggresivePoint = 2;
-		  }else if(game.gameTime <= 50) {
-		   this.aggresivePoint = 3;
-		  }else if(game.gameTime <= 70) {
-		   this.aggresivePoint = 4;
-		  }else if(game.gameTime <= 90) {
-		   this.aggresivePoint = 5;
-		  }else {
-		   this.aggresivePoint = 6;
-		  }
+		if(game.getGameTime() % 15 == 1) {
+			flagTime = true;
+		}
+		if(game.getGameTime() % 15 ==0 && flagTime) {
+			aggresivePoint++;
+			flagTime = false;
+		}
 	 }
 	
 	public int getAggresivePoint() {

@@ -10,6 +10,8 @@ public class Boss extends Enemy{
 	private EntityController entityController;
 	private Animation anim;
 	Random random = new Random();
+	private int velX=0;
+	private int velY=2;
 	
 	public Boss(double x, double y,Texture tex,Game game,EntityController entityController, int aggresivePoint) {
 		super(x, y);
@@ -26,32 +28,26 @@ public class Boss extends Enemy{
 	
 	
 	public void tick() {
-		
-		if(x >=1260) {
-			x -= 3;
-		}else if(x<900) {
-			x+=2;
-		}
-		else if(y>650) {
-			y-=2;
-		}else if(y<100) {
-			y+=2;
-		}
-			else {
-			int tempTransformation = random.nextInt(4);
-			if(tempTransformation == 1) {
-				x -= 2;
-			}else if(tempTransformation ==2) {
-				x += 2;
-			}else if(tempTransformation ==3) {
-				y -= 2;
-			}else if(tempTransformation ==4) {
-				y += 2;
-			}else {
-				x -= 1;
+
+		//System.out.println(x +" "+ y);
+		x+=velX;
+		y+=velY;
+//		if(x>600) {
+//			
+			if(x>1280-250) {
+				velX=-2;
+			}if(x<700){
+				velX=+2;
 			}
+//		}
 			
-		}
+			if(y>450) {
+				velY=-2;
+				System.out.println("Bounce up");
+			}if(y<50){
+				System.out.println("Bounce dwon");
+				velY=+2;
+			}
 		
 		
 	}

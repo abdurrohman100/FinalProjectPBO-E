@@ -128,7 +128,7 @@ public class ScoreManager {
 			g.setFont(title);
     		g.setColor(Color.BLUE);	
         	g.drawRect(0, 0, 200, 50);
-        	String print = ""+ this.activeScore;
+        	String print = "Score : "+ this.activeScore;
         	g.drawString(print, 5, 40);
     }
     public void renderHOF(Graphics g) {
