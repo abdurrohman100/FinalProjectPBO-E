@@ -7,11 +7,17 @@ public class Texture {
 
 		public ArrayList<BufferedImage> player,bullet,enemy,boss;
 		private SpriteSheet ss;
+		/**
+		 * @param game Untuk mendapatkan spritesheet
+		 */
 		public Texture(Game game) {
 			ss = new SpriteSheet(game.getSpriteSheet());
 			getTextureAll();
 			
 		}
+		/**
+		 * Ambil semua gambar untuk etaip object dan jadikan sebuah arraylist of image
+		 */
 		private void getTextureAll() {
 			player=ss.grabSprite(0, 0, 50, 50, 20);
 			enemy=ss.grabSprite(0, 50, 40, 40, 3);

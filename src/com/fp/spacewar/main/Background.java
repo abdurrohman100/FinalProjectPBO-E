@@ -2,74 +2,71 @@ package com.fp.spacewar.main;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-	import java.awt.Graphics;
-	import java.awt.image.BufferedImage;
-	import java.io.File;
 import java.io.IOException;
 
-import javax.imageio.ImageIO;
-	 
 	public class Background {
 	    private BufferedImage image;
-	 
-	    private double x;
-	    private double y;
+	    private double posX;
+	    private double posY;
+	    
+	    /**Default Constructor
+	     * 
+	     */
 	    public Background() {
 	        this(0,0,"res/bg-Recovered.png");
 	    }
 	 
-	    public Background(double x, double y,String path) {
-	        this.x = x;
-	        this.y = y;
+	    /**
+	     * @param posX posisi X background
+	     * @param posY posisi Y background
+	     * @param path path file yang ingin di load (root src/)
+	     */
+	    public Background(double posX, double posY,String path) {
+	        this.posX = posX;
+	        this.posY = posY;
 	        
-	        // Try to open the image file background.png
+	        // Try to open the image file
 	        BufferedImageLoader loader= new BufferedImageLoader();
 			try {
-				//image = loader.loadImage("res/bg.png");
 				image = loader.loadImage(path);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 	    }
 	    
+	    /**Fungsi untuk merender background static
+	     * @param window passing graphics
+	     */
 	    public void render(Graphics window) {
-	   	 
-	        // Draw the image onto the Graphics reference
-	        window.drawImage(image, (int)getX(), (int)getY(), image.getWidth(), image.getHeight(), null);
+	        window.drawImage(image, (int)posX, (int)posY, image.getWidth(), image.getHeight(), null);
 	 
 	    }
+	    /**Fungsi untuk merender background secara loop tiap n%2 * bacground width
+	     * bisa dilakukan dengan bantuan 2 buah background
+	     * @param window
+	     */
 	    public void drawScrollingBG(Graphics window) {
 	 
-	        // Draw the image onto the Graphics reference
-	        window.drawImage(image, (int)getX(), (int)getY(), image.getWidth(), image.getHeight(), null);
+	        // Render gambar image diposisi awal
+	        window.drawImage(image, (int)posX, (int)posY, image.getWidth(), image.getHeight(), null);
 	 
-	        // Move the x position left for next time
-	        this.x -= 1;
+	        // Geser gambar ke kiri
+	        this.posX -= 1;
 	        
 	 
-	        // Check to see if the image has gone off stage left
-	        if (this.x <= -1 * image.getWidth()) {
+	        // Cek apakah gambar sudah melewati batas kiri
+	        if (this.posX <= -1 * image.getWidth()) {
 	 
-	            // If it has, line it back up so that its left edge is
-	            // lined up to the right side of the other background image
-	            this.x = this.x + image.getWidth() * 2;
+	            // Jika sudah melewati batas kiri
+	            // Letakan background ini setelah background kedua
+	            this.posX = this.posX + image.getWidth() * 2;
 	        }
-	 
 	    }
-	 
-	    public void setX(double x) {
-	        this.x = x;
-	    }
-	    public double getX() {
-	        return this.x;
-	    }
-	    public double getY() {
-	        return this.y;
-	    }
-
+		/**
+		 * @return panjang background
+		 */
 		public double getWidth() {
-			// TODO Auto-generated method stub
-			return (double)this.image.getWidth();
+			return this.image.getWidth();
 		}
 	 
 }

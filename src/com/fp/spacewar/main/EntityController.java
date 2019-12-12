@@ -1,12 +1,8 @@
 package com.fp.spacewar.main;
-
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
 
-import com.fp.spacewar.main.entity.EntityA;
 
 public class EntityController {
 
@@ -37,16 +33,15 @@ public class EntityController {
 		createEnemy(4);
 	}
 	
-	public void createEnemy(int enemy_count) { //spawn
-//			System.out.println("game tiuem"+game.gameTime);
+	public void createEnemy(int enemy_count) {
 		for(int i=0;i<enemy_count;i++) {
-			addArmy(new Army(random.nextInt(2000 - 1250 + 1) + 1250,random.nextInt(600),tex,game,this, aggresivePoint));
+			addArmy(new Army(random.nextInt(2000 - 1250 + 1) + 1250,random.nextInt(600),tex, aggresivePoint));
 		}
 	}
 	
 	public void createArmyBullet(Army army) {
 		System.out.println("TEMBAK!");
-		bulletEnemyList.add(new BulletEnemy(army.x, army.y, tex, game));
+		bulletEnemyList.add(new BulletEnemy(army.x, army.y, tex));
 //		for(int i = 0;i<)
 	}
 	
@@ -54,7 +49,7 @@ public class EntityController {
 		System.out.println("TEMBAK BOSS!");
 		int a = 1;
 		for(int i = 0; i<10 && bosMati == false ;i++) {
-			bulletEnemyList.add(new BulletEnemy(boss.x, boss.y+100+(i*10*a), tex, game));
+			bulletEnemyList.add(new BulletEnemy(boss.x, boss.y+100+(i*10*a), tex));
 			//bulletEnemyList.add(new BulletEnemy(boss.x, boss.y-(i*10*a), tex, game));
 			a *= -1;
 		}
@@ -118,7 +113,7 @@ public class EntityController {
 		
 		//spawn Boss every score 300
 		if(game.getTotalScore() % 300 >= 0 && game.getTotalScore() % 300 <=9  && game.getTotalScore() != 0 && bosMati == true) {
-			boss = new Boss(1280, 350, tex, game, this, aggresivePoint);
+			boss = new Boss(1280, 350, tex, aggresivePoint);
 			bosMati = false;
 		}
 		
@@ -135,13 +130,6 @@ public class EntityController {
 		//check army enemy killed by player bullet
 		collision(armyList, bulletList);
 		
-//		//check enemy killed
-//				Army armyIter = collision(armyList, bulletList);
-//				if(armyIter!= null){
-//					removeArmy(armyIter);
-//				}
-		
-		//A Class
 		for(int i=0;i<armyList.size();i++) {
 			tempEntityA= armyList.get(i);
 			tempEntityA.tick();
@@ -264,14 +252,29 @@ public class EntityController {
 	
 	boolean flagTime = true;
 	
+//	public void compAggresivePoint() {
+//		if(game.getGameTime() % 15 == 1) {
+//			flagTime = true;
+//		}
+//		if(game.getGameTime() % 15 ==0 && flagTime) {
+//			aggresivePoint++;
+//			flagTime = false;
+//		}
+//	 }
 	public void compAggresivePoint() {
-		if(game.getGameTime() % 15 == 1) {
-			flagTime = true;
-		}
-		if(game.getGameTime() % 15 ==0 && flagTime) {
-			aggresivePoint++;
-			flagTime = false;
-		}
+		  if(game.gameTime <= 20) {
+		   this.aggresivePoint = 1;
+		  }else if(game.gameTime <= 30) {
+		   this.aggresivePoint = 2;
+		  }else if(game.gameTime <= 50) {
+		   this.aggresivePoint = 3;
+		  }else if(game.gameTime <= 70) {
+		   this.aggresivePoint = 4;
+		  }else if(game.gameTime <= 90) {
+		   this.aggresivePoint = 5;
+		  }else {
+		   this.aggresivePoint = 6;
+		  }
 	 }
 	
 	public int getAggresivePoint() {

@@ -9,23 +9,32 @@ public class Animation {
 	ArrayList<BufferedImage>anim;
 	BufferedImage animImage;
 	int index;
-	Game game;
-	
-	public Animation(ArrayList<BufferedImage>anim,Game game) {
-		this.anim=anim;
+
+	/**
+	 * @param animationImage passing image yanbg akan dianimasikan
+	 */
+	public Animation(ArrayList<BufferedImage>animationImage) {
+		this.anim=animationImage;
 		index=0;
-		animImage= anim.get(index);
-		this.game=game;
+		animImage= animationImage.get(index);
 	}
 
+	/**Dijalankan dirunnable pada class game
+	 * mengupdate index gambar dan melooping setiap kali fungsi tick dipanggil
+	 */
 	public void tick() {
-			//index=(int)game.pewaktu.getTime();
 			index++;
-			animImage= anim.get(index%anim.size());
+			animImage= anim.get(index % anim.size());
 	}
-	public void drawAnimation(Graphics g,double x,double y) {
+	
+	/**
+	 * @param g graphic passing
+	 * @param posX posisi koordinat x untuk menggambar animasi
+	 * @param posY posisi koordinat y untuk menggambar animasi
+	 */
+	public void drawAnimation(Graphics g,double posX,double posY) {
 		
-		g.drawImage(animImage, (int) x, (int) y, null);
+		g.drawImage(animImage, (int) posX, (int) posY, null);
 	}
 
 

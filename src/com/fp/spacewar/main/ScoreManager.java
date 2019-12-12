@@ -14,11 +14,9 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import com.fp.spacewar.main.Game.GameState;
 public class ScoreManager {
 	private ArrayList<Score> scores;
 	Game game;
-	// The name of the file where the highscores will be saved
     private static final String HIGHSCORE_FILE = "scores.dat";
     private int activeScore;
     ObjectOutputStream outputStream = null;
@@ -105,8 +103,10 @@ public class ScoreManager {
     	}
     }
     public int getLastTen() {
+    	loadScoreFile();
+    	sort();
     	int scoresSize =scores.size();
-    	if(scoresSize>10)scoresSize=10;
+    	if(scoresSize>=10)scoresSize=10;
     	if(scores.isEmpty()) {
     		return 0;
     	}else {
@@ -127,7 +127,7 @@ public class ScoreManager {
 	    	Font title = new Font("SanSerif", Font.BOLD,36);
 			g.setFont(title);
     		g.setColor(Color.BLUE);	
-        	g.drawRect(0, 0, 200, 50);
+        	g.drawRect(0, 0, 300, 50);
         	String print = "Score : "+ this.activeScore;
         	g.drawString(print, 5, 40);
     }
@@ -141,7 +141,7 @@ public class ScoreManager {
 		Font title = new Font("SanSerif", Font.BOLD,66);
 		g.setFont(title);
 		g.setColor(Color.WHITE	);
-		g.drawString("Hall of Shame", Game.w/2-150, 100);
+		g.drawString("Hall of Fame", Game.w/2-150, 100);
 		Font back = new Font("SanSerif", Font.BOLD,20);
 		g.setFont(back);
 		g2d.draw(new Rectangle(20,50,60,30));

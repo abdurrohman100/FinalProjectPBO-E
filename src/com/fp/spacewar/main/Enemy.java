@@ -6,16 +6,16 @@ import java.awt.Rectangle;
 public class Enemy extends GameObject{
 	
 	private int healtPoint, attackPoint;
-	protected Game game;
-	public Enemy(double x, double y) {
-		super(x, y);
-		// TODO Auto-generated constructor stub
-	}
 	
-	public void shootPlayer() {
-		
+	/**
+	 * Constructor
+	 * @param posX posisi X
+	 * @param posY posis Y
+	 */
+	public Enemy(double posX, double posY) {
+		super(posX, posY);
 	}
-	
+	//Setter and Getter
 	public int getHealtPoint() {
 		return healtPoint;
 	}
@@ -29,7 +29,9 @@ public class Enemy extends GameObject{
 	public void setAttackPoint(int attackPoint) {
 		this.attackPoint = attackPoint;
 	}
-
+	
+	
+	//Abstract method from Game Object
 	@Override
 	public void tick() {
 		// TODO Auto-generated method stub

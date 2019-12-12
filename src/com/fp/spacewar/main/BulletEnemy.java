@@ -2,33 +2,31 @@ package com.fp.spacewar.main;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-
-import com.fp.spacewar.main.entity.EntityA;
 
 public class BulletEnemy extends GameObject{
 
-	private double velX;
-	private double velY;
-	private Game game;
 	private Texture tex;
 	
-	public BulletEnemy (double x, double y,Texture tex,Game game) {
-		super(x,y);
+	/**
+	 * @param posX posisi X
+	 * @param posY posisi Y
+	 * @param tex texture untuk bullet
+	 */
+	public BulletEnemy (double posX, double posY,Texture tex) {
+		super(posX,posY);
 		this.tex=tex;
-		this.game=game;
-		//enemyBulletAnim= new Animation(tex);
-		
 	}
+	/**
+	 *Update perilaku bullet
+	 */
 	public void tick() {
 		x-=3;
-		
-
 	}
 	public void render(Graphics g) {
 		g.drawImage(tex.bullet.get(0), (int)x,(int)y,null);
 	}
+	
+	//Getter and Setter
 	public double getX() {
 		return x;
 	}public double getY() {

@@ -6,56 +6,54 @@ import java.util.Random;
 
 public class Boss extends Enemy{
 
-	private Texture tex;
-	private EntityController entityController;
 	private Animation anim;
 	Random random = new Random();
 	private int velX=0;
 	private int velY=2;
 	
-	public Boss(double x, double y,Texture tex,Game game,EntityController entityController, int aggresivePoint) {
-		super(x, y);
-		this.game=game;
-		this.tex=tex;
-		this.entityController=entityController;
+
+	/**
+	 * @param posX posisi X objek
+	 * @param posY posisi Y objek
+	 * @param tex  texture memuat gambar untuk animasi objek boss
+	 * @param aggresivePoint merupakan faktor difficult dari bos
+	 */
+	public Boss(double posX, double posY,Texture tex, int aggresivePoint) {
+		super(posX, posY);
 		this.setAttackPoint(aggresivePoint+1);
-		anim=new Animation(tex.boss,game);
+		anim=new Animation(tex.boss);
 		this.setHealtPoint(aggresivePoint*1000);
-		System.out.println("HAI BOSS");
-		// TODO Auto-generated constructor stub
 	}
 	
 	
 	
+	/**Fungsi untuk mengupdate perilaku boss
+	 *
+	 */
 	public void tick() {
-
-		//System.out.println(x +" "+ y);
 		x+=velX;
 		y+=velY;
-//		if(x>600) {
-//			
-			if(x>1280-250) {
-				velX=-2;
-			}if(x<700){
-				velX=+2;
-			}
-//		}
-			
-			if(y>450) {
-				velY=-2;
-				System.out.println("Bounce up");
-			}if(y<50){
-				System.out.println("Bounce dwon");
-				velY=+2;
-			}
-		
-		
+	
+		if(x>1280-250) {
+			velX=-2;
+		}if(x<700){
+			velX=+2;
+		}if(y>450) {
+			velY=-2;
+		}if(y<50){	
+			velY=+2;
+		}
 	}
 	
+	/**Fungsi untuk menggambar animasi dari Boss
+	 * 
+	 */
 	public void render(Graphics g) {
-		//g.drawImage(tex.enemy.get(0), (int)x,(int)y,null);
 		anim.drawAnimation(g, x, y);
 	}
+	/**Fungsi untuk mendapat boundaries persegi dari sprite Boss
+	 *
+	 */
 	public Rectangle getBounds() {
 		return new Rectangle((int)x,(int)y,250,250);
 	}

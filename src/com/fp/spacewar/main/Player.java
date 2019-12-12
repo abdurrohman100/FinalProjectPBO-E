@@ -4,16 +4,12 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
-
 import com.fp.spacewar.main.Game.GameState;
-import com.fp.spacewar.main.entity.EntityA;
-
 public class Player extends GameObject{
 	public int healthPoint;
 	private double velX=0;
 	private double velY=0;
-	private Texture tex;
+
 	private int score=0;
 	private Animation anim;
 	Game game;
@@ -21,10 +17,9 @@ public class Player extends GameObject{
 	public Player(double x,double y,Texture tex,Game game) {
 		super(x,y);
 		this.healthPoint = 100;
-		this.tex=tex;
 		this.score=0;
 		this.game=game;
-		anim= new Animation(tex.player,game);
+		anim= new Animation(tex.player);
 		
 		
 	}

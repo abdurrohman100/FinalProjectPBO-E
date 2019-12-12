@@ -28,15 +28,16 @@ public class Menu {
 		Font title = new Font("SanSerif", Font.BOLD,66);
 		g.setFont(title);
 		g.setColor(Color.WHITE);
-		g.drawString("Judul Asu", Game.w/2-150, 100);
+		g.drawString("Space Impact", Game.w/2-200, 100);
 		Font optMenu = new Font("SanSerif", Font.BOLD,46);
-		g.drawString("Play", playButton.x+35, playButton.y+55);
+		g.setFont(optMenu);
+		g.drawString("Play", playButton.x+50, playButton.y+55);
 		g2d.draw(playButton);
-		g.drawString("Hall", hofButton.x+35, hofButton.y+55);
+		g.drawString("Hall", hofButton.x+50, hofButton.y+55);
 		g2d.draw(hofButton);
-		g.drawString("Help", helpButton.x+35, helpButton.y+55);
+		g.drawString("Help", helpButton.x+50, helpButton.y+55);
 		g2d.draw(helpButton);
-		g.drawString("Quit", quitButton.x+35, quitButton.y+55);
+		g.drawString("Quit", quitButton.x+50, quitButton.y+55);
 		g2d.draw(quitButton);
 	}
 }

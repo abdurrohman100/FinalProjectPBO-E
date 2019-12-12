@@ -17,53 +17,61 @@ public class Game extends Canvas implements Runnable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-	public static final int w =1280;
-	public static final int h =700;
-	public final static String title = "Space Impact";
-	private boolean running= false, tidakJawab;
-	private boolean scoredSubmitted= false;
+	//Thread
 	private Thread thread,waktu;
+	//Frame
+	public static final int h =700;
+	public static final int w =1280;
+	public final static String title = "Space Impact";
+	private static final long serialVersionUID = 1L;
+	//Timer
 	public TimerSendiri pewaktu;
 	public long gameTime;
-	private int totalScore;
-	private BufferedImage image = new BufferedImage(w, h,BufferedImage.TYPE_INT_RGB);
-	private BufferedImage spriteSheet=null;
-	private Player player;
-	private Texture tex;
-	private boolean isShooting=false;
-	private Background background1;
-	private Background background2;
-	private EntityController entityController;
-	private Help help = new Help();
-	private Menu myMenu;
-	private ScoreManager myScoreManager;
+	//Game State
 	public static GameState currentGameState;
-	public LinkedList<EntityA> entityAList;
-	private long timeSoal;
-	private boolean adaSoal= false;
 	public static enum GameState{
 		IN_MENU,
 		IN_PLAY,
 		IN_GAMEOVER,
 		IN_HOF,
 		IN_HELP
-
+		
 	}
+	//Score
+	private ScoreManager myScoreManager= new ScoreManager(this);;
+	private int totalScore;
+	//In Game Object
+	private Player player;
+	public LinkedList<EntityA> entityAList;
+	private Background background1;
+	private Background background2;
+	private Help help = new Help();
+	private Menu myMenu=new Menu();
+	private EntityController entityController;
+	private boolean isShooting=false;
+	//Image loadeer
+	private BufferedImage image = new BufferedImage(w, h,BufferedImage.TYPE_INT_RGB);
+	private BufferedImage spriteSheet=null;
+	private Texture tex;
 
+	//Sound
 	private Sound bgmMenu = new Sound("mainmenu.wav");
 	private Sound bgmHOF = new Sound("HallofFame.wav");
 	private Sound bgmPlay = new Sound("ingame.wav");
 	private Sound bgmGameOver = new Sound("gameovverwav.wav");
 	private Sound shoot = new Sound("shoot.wav");
+	//Soal Util
+	private boolean adaSoal= false;
 	private MathGenerator mg;
+	private long timeSoal;
+	private boolean running= false, tidakJawab;
+	private boolean scoredSubmitted= false;
 
 	
 	public Game() {
 		this.setPreferredSize(new Dimension (w,h));
 		this.setMaximumSize(new Dimension (w,h));
-		this.setMinimumSize(new Dimension (w,h));
-		
+		this.setMinimumSize(new Dimension (w,h));		
 	}
 	
 	public void init() {
@@ -72,7 +80,6 @@ public class Game extends Canvas implements Runnable {
 		try {
 			spriteSheet = loader.loadImage("res/asset6.png");
 		} catch (IOException e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 		
@@ -86,8 +93,8 @@ public class Game extends Canvas implements Runnable {
 		player = new Player(100,360,tex,this);
 		background1 = new Background();
 		background2 = new Background(background1.getWidth(),0,"res/bg-Recovered.png");
-		myMenu = new Menu();
-		myScoreManager = new ScoreManager(this);
+		//myMenu = new Menu();
+		//myScoreManager = new ScoreManager(this);
 		entityController = new EntityController(tex,this);
 		bgmPlay.setVolume(0.21F);
 		bgmGameOver.setVolume(1F);
@@ -108,7 +115,6 @@ public class Game extends Canvas implements Runnable {
 		try {
 			thread.join();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		System.exit(1);
@@ -126,10 +132,7 @@ public class Game extends Canvas implements Runnable {
 
 		while(running) {
 			gameTime = pewaktu.getTime(); 
-//			System.out.println("wakltu skregadsasdsa"+ gameTime);
 			long now=System.nanoTime();
-//			System.out.println("Score "+ player.getScore());
-			
 			delta+=(now-lastTime)/ns;
 			lastTime=now;
 			if(delta>=1) {
@@ -154,7 +157,6 @@ public class Game extends Canvas implements Runnable {
 		
 			render();
 			frames++;
-			//System.out.println("WOrking");
 			if(System.currentTimeMillis()-timer>1000) {
 				timer+=1000;
 				System.out.println(updates + "Ticks, FPS"+ frames);
@@ -167,7 +169,6 @@ public class Game extends Canvas implements Runnable {
 	}
 
 	private void render() {
-		// TODO Auto-generated method stub
 		BufferStrategy bs = this.getBufferStrategy();
 		if(bs == null) {
 			createBufferStrategy(4);
@@ -254,9 +255,8 @@ public class Game extends Canvas implements Runnable {
 			}else if(k==KeyEvent.VK_UP) {
 				player.setVelY(-2.5);
 			}else if(k==KeyEvent.VK_SPACE && !isShooting) {
-				
-//				//lastShooting=
-				entityController.addBullet(new Bullet(player.getX()+60, player.getY()+25, tex,this));	
+
+				entityController.addBullet(new Bullet(player.getX()+60, player.getY()+25, tex));	
 				shoot.play();
 				shoot.click.setFramePosition(0);
 				isShooting=true;
@@ -321,9 +321,7 @@ public class Game extends Canvas implements Runnable {
 				isShooting=false;
 			}
 		}
-		//System.out.println(player.getX() +" "+ player.getY());
 
-		
 		
 	}
  

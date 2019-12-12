@@ -1,12 +1,12 @@
 package com.fp.spacewar.main;
-
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Rectangle;
 import java.io.Serializable;
 
 public class Score implements Serializable{
-    private int score;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private int score;
     private String nama="Tanpa Nama";
     
     public Score(int score) {

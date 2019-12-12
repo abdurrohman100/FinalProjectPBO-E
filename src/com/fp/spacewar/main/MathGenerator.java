@@ -31,14 +31,7 @@ public class MathGenerator{
 		Random random= new Random();  
 		return random.nextInt(max - min + 1) + min;
 	}
-	
-//	private static int randomGenerator(double min, double max) {
-//		Random random= new Random();  
-//		random.nextDouble();
-//		random.ne
-//		return random.nextInt(max - min + 1) + min;
-//	}
-	
+
 	private void findAllOperand() {
 		operand1 = randomGenerator(2*(difficulty), 15*difficulty);
 		operand2 = randomGenerator(2*(difficulty), 15*difficulty);
@@ -75,44 +68,22 @@ public class MathGenerator{
 				this.answer.add(Integer.toString(tempResult));
 			}		
 		}
-		
-		//System.out.println(question);
+
 		for(int i=0;i<4;i++) {
 			System.out.println(answer.get(i));
 			
 		}
-		//System.out.println(trueOption +" "+ resultInt +" "+tempOperator);
-//		System.out.println(this.operand1 +" "+this.operator+" "+this.operand2+" = "+this.result);
 	}
 	
 	public void render(Graphics g) {
-		
-//		
-//		for (int i = 0; i <4;i++) {
-//			if((i+1) == trueOption) {
-//				this.answer.add(Integer.toString(resultInt));
-//			}
-//			else {
-//				
-//				int tempResult = randomGenerator(this.resultInt-20, this.resultInt+20);
-//				if(tempResult == resultInt) {
-//					tempResult += 1;
-//				}
-//				this.answer.add(Integer.toString(tempResult));
-//			}		
-//		}
 		Font questionFont = new Font("SanSerif", Font.ITALIC, 54);
 		g.setFont(questionFont);
 		g.setColor(Color.WHITE);
-		g.drawString(question, 600, 100);
+		g.drawString(question, 550, 100);
 
 		for(int i=0;i<4;i++) {
-			Graphics2D g2d =(Graphics2D) g;
-			g2d.draw(new Rectangle(50+i*300, 150,300,70));
-			g.drawString("("+(i+1)+")"+ "." + answer.get(i), 50+i*300, 200);
+			g.drawString("("+(i+1)+")"+ "." + answer.get(i), 150+i*300, 200);
 		}
-		//System.out.println(trueOption +" "+ resultInt +" "+tempOperator);
-
 	}
 	public void cekTrue(int submited) {
 		System.out.println("jawaban"+trueOption + " input"+submited);

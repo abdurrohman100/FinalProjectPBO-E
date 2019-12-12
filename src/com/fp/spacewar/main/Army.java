@@ -2,27 +2,28 @@ package com.fp.spacewar.main;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
-
 import java.util.Random;
-
-import com.fp.spacewar.main.entity.EntityA;
-
 public class Army extends Enemy {
 
-	private Texture tex;
-	private EntityController entityController;
+
 	private Animation anim;
 	Random random = new Random();
 	
-	public Army(double x, double y,Texture tex,Game game,EntityController entityController, int aggresivePoint) {
-		super(x,y);
-		this.game=game;
-		this.tex=tex;
-		this.entityController=entityController;
+	/**Constructor
+	 * @param posX Posisi x spawn 
+	 * @param posY Posisi x spawn 
+	 * @param textureImagae texture image memuat gambar untuk animasi army;
+	 * @param aggresivePoint merupakan variable tingkat kesulitan
+	 */
+	public Army(double posX, double posY,Texture textureImagae, int aggresivePoint) {
+		super(posX,posY);
 		this.setAttackPoint(aggresivePoint+1);
-		anim=new Animation(tex.enemy,game);
+		anim=new Animation(textureImagae.enemy);
 	}
 	
+	/**Fungsi untuk mengupdate perilaku army
+	 *
+	 */
 	public void tick() {
 		
 		x-=2;
@@ -33,27 +34,20 @@ public class Army extends Enemy {
 		anim.tick();
 	}
 	
+	/**Fungsi untuk merender animasi dari army
+	 *
+	 */
 	public void render(Graphics g) {
 		anim.drawAnimation(g, x, y);
 	}
-	public double getX() {
-		return x;
-	}
 	
-	public double getY() {
-		return y;
-	}
-
-	public void setY(double y) {
-		this.y = y;
-	}
-
-	public void setX(double x) {
-		this.x = x;
-	}
-
+	/**Fungsi untuk mendapatkan batas dari object
+	 *
+	 */
 	public Rectangle getBounds() {
 		return new Rectangle((int)x,(int)y,40,40);
 	}
+
+
 	
 }
