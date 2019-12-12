@@ -5,33 +5,25 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints.Key;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.LinkedList;
-import java.util.Random;
-import java.util.Timer;
-
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-
-import org.w3c.dom.css.RGBColor;
-
-import com.fp.spacewar.main.Game.GameState;
-//import com.fp.spacewar.main.entity.Controller;
-
 import com.fp.spacewar.main.entity.EntityA;
 
 public class Game extends Canvas implements Runnable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public static final int w =1280;
 	public static final int h =700;
 	public final static String title = "Space Impact";
 	private boolean running= false, tidakJawab;
 	private boolean scoredSubmitted= false;
-	private Thread thread,waktu,sound;
+	private Thread thread,waktu;
 	public TimerSendiri pewaktu;
 	public long gameTime;
 	private int totalScore;
@@ -43,17 +35,19 @@ public class Game extends Canvas implements Runnable {
 	private Background background1;
 	private Background background2;
 	private EntityController entityController;
+	private Help help = new Help();
 	private Menu myMenu;
 	private ScoreManager myScoreManager;
 	public static GameState currentGameState;
 	public LinkedList<EntityA> entityAList;
-	private long lastShooting, timeSoal;
+	private long timeSoal;
 	private boolean adaSoal= false;
 	public static enum GameState{
 		IN_MENU,
 		IN_PLAY,
 		IN_GAMEOVER,
 		IN_HOF,
+		IN_HELP
 
 	}
 
@@ -63,9 +57,7 @@ public class Game extends Canvas implements Runnable {
 	private Sound bgmGameOver = new Sound("gameovverwav.wav");
 	private Sound shoot = new Sound("shoot.wav");
 	private MathGenerator mg;
-	private boolean soalTerjawab=false;
-	private boolean soalBenar;
-	
+
 	
 	public Game() {
 		this.setPreferredSize(new Dimension (w,h));
@@ -93,7 +85,7 @@ public class Game extends Canvas implements Runnable {
 		tex= new Texture(this);
 		player = new Player(100,360,tex,this);
 		background1 = new Background();
-		background2 = new Background(background1.getWidth(),0);
+		background2 = new Background(background1.getWidth(),0,"res/bg-Recovered.png");
 		myMenu = new Menu();
 		myScoreManager = new ScoreManager(this);
 		entityController = new EntityController(tex,this);
@@ -193,8 +185,8 @@ public class Game extends Canvas implements Runnable {
 				
 				bgmPlay.loop();
 			}
-			background1.draw(g);
-			background2.draw(g);
+			background1.drawScrollingBG(g);
+			background2.drawScrollingBG(g);
 			entityController.render(g);
 			player.render(g);
 			myScoreManager.render(g);
@@ -225,8 +217,10 @@ public class Game extends Canvas implements Runnable {
 			bgmHOF.stop();
 			bgmMenu.stop();
 			bgmGameOver.play();
-			
 			drawGameOver(g);
+		}if(currentGameState==GameState.IN_HELP) {
+			help.render(g);
+			
 			
 		}
 		
@@ -342,7 +336,6 @@ public class Game extends Canvas implements Runnable {
 	}
 
 	public void drawGameOver(Graphics g) {
-		Graphics2D g2d =(Graphics2D)g;
 		Font title = new Font("SanSerif", Font.BOLD,66);
 		g.setFont(title);
 		g.setColor(Color.WHITE);

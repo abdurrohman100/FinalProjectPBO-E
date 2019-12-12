@@ -15,10 +15,10 @@ import javax.imageio.ImageIO;
 	    private double x;
 	    private double y;
 	    public Background() {
-	        this(0,0);
+	        this(0,0,"res/bg-Recovered.png");
 	    }
 	 
-	    public Background(double x, double y) {
+	    public Background(double x, double y,String path) {
 	        this.x = x;
 	        this.y = y;
 	        
@@ -26,12 +26,19 @@ import javax.imageio.ImageIO;
 	        BufferedImageLoader loader= new BufferedImageLoader();
 			try {
 				//image = loader.loadImage("res/bg.png");
-				image = loader.loadImage("res/bg-Recovered.png");
+				image = loader.loadImage(path);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 	    }
-	    public void draw(Graphics window) {
+	    
+	    public void render(Graphics window) {
+	   	 
+	        // Draw the image onto the Graphics reference
+	        window.drawImage(image, (int)getX(), (int)getY(), image.getWidth(), image.getHeight(), null);
+	 
+	    }
+	    public void drawScrollingBG(Graphics window) {
 	 
 	        // Draw the image onto the Graphics reference
 	        window.drawImage(image, (int)getX(), (int)getY(), image.getWidth(), image.getHeight(), null);

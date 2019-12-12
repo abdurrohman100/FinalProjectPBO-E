@@ -2,8 +2,7 @@ package com.fp.spacewar.main;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
+
 import java.util.Random;
 
 import com.fp.spacewar.main.entity.EntityA;
@@ -32,15 +31,9 @@ public class Army extends Enemy {
 			y=random.nextInt(600);
 		}
 		anim.tick();
-//		if(Physics.Collision(this, game.entityAList)) {
-//			System.out.println("Duar");
-//			entityController.removeEntity(this);
-//		}
-		
 	}
 	
 	public void render(Graphics g) {
-		//g.drawImage(tex.enemy.get(0), (int)x,(int)y,null);
 		anim.drawAnimation(g, x, y);
 	}
 	public double getX() {
